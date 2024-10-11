@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Fraud Report</title>
+</head>
+<body>
+    <h1>Add Fraud Report</h1>
+    <form action="{{ url_for('fraud_form') }}" method="post">
+        <label for="fraud_id">Fraud ID:</label>
+        <input type="text" id="fraud_id" name="fraud_id" required><br>
+
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" required><br>
+
+        <label for="time_of_incident">Time of Incident:</label>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br>
+
+        <label for="location">Location:</label>
+        <select id="location" name="location" required>
+            <option value="Online">Online</option>
+            <option value="Physical">Physical Location</option>
+        </select><br>
+
+        <label for="type_of_fraud">Type of Fraud:</label>
+        <select id="type_of_fraud" name="type_of_fraud" required>
+            <option value="Identity theft">Identity theft</option>
+            <option value="Financial fraud">Financial fraud</option>
+            <option value="Credit card fraud">Credit card fraud</option>
+            <option value="Other">Other</option>
+        </select><br>
+
+        <label for="details_of_incident">Details of Incident:</label><br>
+        <textarea id="details_of_incident" name="details_of_incident" rows="4" required></textarea><br>
+
+        <label for="crime_severity">Crime Severity:</label>
+        <select id="crime_severity" name="crime_severity" required>
+            <option value="Minor">Minor</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Serious">Serious</option>
+            <option value="Critical">Critical</option>
+        </select><br>
+
+        <h3>Victim Information</h3>
+        <label for="victim_age">Victim Age:</label>
+        <input type="number" id="victim_age" name="victim_age" required><br>
+
+        <label for="victim_gender">Victim Gender:</label>
+        <select id="victim_gender" name="victim_gender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select><br>
+
+        <label for="victim_occupation">Victim Occupation:</label>
+        <input type="text" id="victim_occupation" name="victim_occupation" required><br>
+
+        <label for="witness">Was there any witness?</label>
+        <select id="witness" name="witness" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br>
+
+        <label for="reported_same_day">Was the crime reported on the same day?</label>
+        <select id="reported_same_day" name="reported_same_day" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br>
+
+        <label for="additional_comments">Additional Comments:</label><br>
+        <textarea id="additional_comments" name="additional_comments" rows="4"></textarea><br>
+
+        <input type="submit" value="Submit Report">
+    </form>
+</body>
+</html>

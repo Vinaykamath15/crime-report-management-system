@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Accident Report</title>
+</head>
+<body>
+    <h1>Traffic Accident Report</h1>
+    <form action="{{ url_for('submit_traffic_accident_report') }}" method="POST">
+        <label for="traffic_id">Traffic ID:</label>
+        <input type="text" id="traffic_id" name="traffic_id" required><br><br>
+
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" required><br><br>
+
+        <label for="time_of_incident">Time of Incident:</label>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <label for="injuries">Were there injuries?</label>
+        <select id="injuries" name="injuries" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="property_damage">Was there damage to property?</label>
+        <select id="property_damage" name="property_damage" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="alcohol_drugs_involved">Was alcohol/drugs involved?</label>
+        <select id="alcohol_drugs_involved" name="alcohol_drugs_involved" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="details_of_accident">Details of Accident:</label><br>
+        <textarea id="details_of_accident" name="details_of_accident" rows="4" required></textarea><br><br>
+
+        <label for="crime_severity">Crime Severity:</label>
+        <select id="crime_severity" name="crime_severity" required>
+            <option value="Minor">Minor</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Serious">Serious</option>
+            <option value="Critical">Critical</option>
+        </select><br><br>
+
+        <h3>Victim Information</h3>
+        <label for="victim_age">Age:</label>
+        <input type="number" id="victim_age" name="victim_age" required><br><br>
+
+        <label for="victim_gender">Gender:</label>
+        <input type="text" id="victim_gender" name="victim_gender" required><br><br>
+
+        <label for="victim_occupation">Occupation:</label>
+        <input type="text" id="victim_occupation" name="victim_occupation" required><br><br>
+
+        <label for="witness">Was there any witness?</label>
+        <select id="witness" name="witness" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="same_day_report">Was the crime reported on the same day?</label>
+        <select id="same_day_report" name="same_day_report" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="additional_comments">Additional Comments:</label><br>
+        <textarea id="additional_comments" name="additional_comments" rows="4"></textarea><br><br>
+
+        <button type="submit">Submit Report</button>
+    </form>
+</body>
+</html>

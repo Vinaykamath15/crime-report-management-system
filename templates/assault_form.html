@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assault Report Form</title>
+</head>
+<body>
+    <h1>Assault Report Form</h1>
+    <form action="{{ url_for('submit_assault_report') }}" method="POST">
+        <label for="assault_id">Assault ID:</label><br>
+        <input type="text" id="assault_id" name="assault_id" required><br><br>
+
+        <label for="case_name">Case Name:</label><br>
+        <input type="text" id="case_name" name="case_name" required><br><br>
+
+        <label for="time_of_incident">Time of Incident:</label><br>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br><br>
+
+        <label for="location">Location:</label><br>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <label for="crime_severity">Crime Severity:</label><br>
+        <select id="crime_severity" name="crime_severity" required>
+            <option value="Minor">Minor</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Serious">Serious</option>
+            <option value="Critical">Critical</option>
+        </select><br><br>
+
+        <label for="victim_age">Victim Age:</label><br>
+        <input type="number" id="victim_age" name="victim_age" required><br><br>
+
+        <label for="victim_gender">Victim Gender:</label><br>
+        <input type="text" id="victim_gender" name="victim_gender" required><br><br>
+
+        <label for="victim_occupation">Victim Occupation:</label><br>
+        <input type="text" id="victim_occupation" name="victim_occupation" required><br><br>
+
+        <label for="witness_present">Was there any witness?</label><br>
+        <select id="witness_present" name="witness_present" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="reported_immediately">Did the victim report to the police immediately?</label><br>
+        <select id="reported_immediately" name="reported_immediately" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="reported_same_day">Was the crime reported on the same day?</label><br>
+        <select id="reported_same_day" name="reported_same_day" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="type_of_assault">Type of Assault:</label><br>
+        <select id="type_of_assault" name="type_of_assault" required>
+            <option value="Physical">Physical</option>
+            <option value="Verbal">Verbal</option>
+            <option value="Sexual">Sexual</option>
+        </select><br><br>
+
+        <label for="injuries_reported">Injuries Reported:</label><br>
+        <select id="injuries_reported" name="injuries_reported" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="weapon_involved">Was a weapon involved?</label><br>
+        <select id="weapon_involved" name="weapon_involved" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="details_of_incident">Details of Incident:</label><br>
+        <textarea id="details_of_incident" name="details_of_incident" required></textarea><br><br>
+
+        <label for="additional_comments">Additional Comments:</label><br>
+        <textarea id="additional_comments" name="additional_comments"></textarea><br><br>
+
+        <input type="submit" value="Submit Report">
+    </form>
+</body>
+</html>

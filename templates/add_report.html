@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Report</title>
+</head>
+<body>
+    <h1>Select Crime Type</h1>
+    <ul>
+        <li><a href="{{ url_for('murder_form') }}">Murder/Homicide</a></li>
+        <li><a href="{{ url_for('assault_form') }}">Assault</a></li>
+        <li><a href="{{ url_for('theft_form') }}">Theft</a></li>
+        <li><a href="{{ url_for('fraud_form') }}">Fraud</a></li>
+        <li><a href="{{ url_for('sexual_assault_form') }}">Sexual Assault</a></li>
+        <li><a href="{{ url_for('domestic_violence_form') }}">Domestic Violence</a></li>
+        <li><a href="{{ url_for('drug_offense_form') }}">Drug Offenses</a></li>
+        <li><a href="{{ url_for('traffic_accidents_form') }}">Traffic Accidents</a></li>
+    </ul>
+</body>
+</html>

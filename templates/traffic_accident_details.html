@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Accident Report Details</title>
+</head>
+<body>
+    <h1>Traffic Accident Report Details</h1>
+    <p><strong>Traffic ID:</strong> {{ report[0] }}</p>
+    <p><strong>Case Name:</strong> {{ report[1] }}</p>
+    <p><strong>Time of Incident:</strong> {{ report[2] }}</p>
+    <p><strong>Location:</strong> {{ report[3] }}</p>
+    <p><strong>Were there injuries?</strong> {{ report[4] }}</p>
+    <p><strong>Was there damage to property?</strong> {{ report[5] }}</p>
+    <p><strong>Was alcohol/drugs involved?</strong> {{ report[6] }}</p>
+    <p><strong>Details of Accident:</strong> {{ report[7] }}</p>
+    <p><strong>Crime Severity:</strong> {{ report[8] }}</p>
+    <p><strong>Victim Age:</strong> {{ report[9] }}</p>
+    <p><strong>Victim Gender:</strong> {{ report[10] }}</p>
+    <p><strong>Victim Occupation:</strong> {{ report[11] }}</p>
+    <p><strong>Was there any witness?</strong> {{ report[12] }}</p>
+    <p><strong>Was the crime reported on the same day?</strong> {{ report[13] }}</p>
+    <p><strong>Additional Comments:</strong> {{ report[14] }}</p>
+    <a href="{{ url_for('view_reports') }}">Back to Reports</a>
+</body>
+</html>

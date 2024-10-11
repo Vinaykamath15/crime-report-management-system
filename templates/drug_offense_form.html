@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drug Offense Report Form</title>
+</head>
+<body>
+    <h1>Drug Offense Report</h1>
+    <form action="{{ url_for('submit_drug_offense_report') }}" method="POST">
+        <label for="drug_id">Drug ID:</label>
+        <input type="text" id="drug_id" name="drug_id" required><br><br>
+
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" required><br><br>
+
+        <label for="incident_time">Time of Incident:</label>
+        <input type="datetime-local" id="incident_time" name="incident_time" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <label for="drug_type">Type of Drug Involved:</label>
+        <select id="drug_type" name="drug_type" required>
+            <option value="marijuana">Marijuana</option>
+            <option value="cocaine">Cocaine</option>
+            <option value="meth">Meth</option>
+            <option value="prescription_drugs">Prescription Drugs</option>
+            <option value="other">Other</option>
+        </select><br><br>
+
+        <label for="details">Details of Incident:</label>
+        <textarea id="details" name="details" required></textarea><br><br>
+
+        <label for="severity">Crime Severity:</label>
+        <select id="severity" name="severity" required>
+            <option value="minor">Minor</option>
+            <option value="moderate">Moderate</option>
+            <option value="serious">Serious</option>
+            <option value="critical">Critical</option>
+        </select><br><br>
+
+        <h2>Criminal Information</h2>
+
+        <label for="criminal_age">Age:</label>
+        <input type="number" id="criminal_age" name="criminal_age" required><br><br>
+
+        <label for="criminal_gender">Gender:</label>
+        <input type="text" id="criminal_gender" name="criminal_gender" required><br><br>
+
+        <label for="criminal_occupation">Occupation:</label>
+        <input type="text" id="criminal_occupation" name="criminal_occupation" required><br><br>
+
+        <label for="witness">Was there any witness?</label>
+        <select id="witness" name="witness" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select><br><br>
+
+        <label for="reported_same_day">Was the crime reported on the same day?</label>
+        <select id="reported_same_day" name="reported_same_day" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select><br><br>
+
+        <label for="quantity_seized">Quantity of Drugs Seized (Optional):</label>
+        <input type="number" id="quantity_seized" name="quantity_seized"><br><br>
+
+        <label for="additional_comments">Additional Comments:</label>
+        <textarea id="additional_comments" name="additional_comments"></textarea><br><br>
+
+        <input type="submit" value="Submit Report">
+    </form>
+</body>
+</html>

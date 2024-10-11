@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sexual Assault Report Form</title>
+</head>
+<body>
+    <h1>Sexual Assault Report Form</h1>
+    <form action="/submit_sa_report" method="POST">
+        <label for="sa_id">SA ID:</label>
+        <input type="text" id="sa_id" name="sa_id" required><br><br>
+
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" required><br><br>
+
+        <label for="time_of_incident">Time of Incident:</label>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <label for="relationship_to_perpetrator">Relationship to Perpetrator:</label>
+        <select id="relationship_to_perpetrator" name="relationship_to_perpetrator" required>
+            <option value="Stranger">Stranger</option>
+            <option value="Acquaintance">Acquaintance</option>
+            <option value="Partner">Partner</option>
+            <option value="Family">Family</option>
+        </select><br><br>
+
+        <label for="crime_severity">Crime Severity:</label>
+        <select id="crime_severity" name="crime_severity" required>
+            <option value="Minor">Minor</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Serious">Serious</option>
+            <option value="Critical">Critical</option>
+        </select><br><br>
+
+        <label for="victim_age">Victim Age:</label>
+        <input type="number" id="victim_age" name="victim_age" required><br><br>
+
+        <label for="victim_gender">Victim Gender:</label>
+        <select id="victim_gender" name="victim_gender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select><br><br>
+
+        <label for="victim_occupation">Victim Occupation:</label>
+        <input type="text" id="victim_occupation" name="victim_occupation" required><br><br>
+
+        <label for="was_witness">Was there any witness?</label>
+        <select id="was_witness" name="was_witness" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="reported_same_day">Was the crime reported on the same day?</label>
+        <select id="reported_same_day" name="reported_same_day" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="details_of_incident">Details of Incident:</label>
+        <textarea id="details_of_incident" name="details_of_incident" required></textarea><br><br>
+
+        <label for="additional_comments">Additional Comments:</label>
+        <textarea id="additional_comments" name="additional_comments"></textarea><br><br>
+
+        <button type="submit">Submit Report</button>
+    </form>
+</body>
+</html>

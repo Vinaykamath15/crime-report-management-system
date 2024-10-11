@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Murder Report Form</title>
+</head>
+<body>
+    <h1>Murder Report Form</h1>
+    <form action="/submit_murder_report" method="POST">
+        <label for="murder_id">Murder ID:</label>
+        <input type="text" id="murder_id" name="murder_id" required><br><br>
+
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" required><br><br>
+
+        <label for="time_of_incident">Time of Incident:</label>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <label for="weapon_used">Weapon Used:</label>
+        <select id="weapon_used" name="weapon_used" required>
+            <option value="Firearm">Firearm</option>
+            <option value="Knife">Knife</option>
+            <option value="None">None</option>
+            <option value="Other">Other</option>
+        </select><br><br>
+
+        <label for="victim_known">Was the victim known to the perpetrator?</label>
+        <select id="victim_known" name="victim_known" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="crime_severity">Crime Severity:</label>
+        <select id="crime_severity" name="crime_severity" required>
+            <option value="Minor">Minor</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Serious">Serious</option>
+            <option value="Critical">Critical</option>
+        </select><br><br>
+
+        <h3>Victim Information</h3>
+        <label for="victim_age">Victim Age:</label>
+        <input type="number" id="victim_age" name="victim_age" required><br><br>
+
+        <label for="victim_gender">Victim Gender:</label>
+        <input type="text" id="victim_gender" name="victim_gender" required><br><br>
+
+        <label for="victim_occupation">Victim Occupation:</label>
+        <input type="text" id="victim_occupation" name="victim_occupation" required><br><br>
+
+        <label for="witness_present">Was there any witness?</label>
+        <select id="witness_present" name="witness_present" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="reported_immediately">Did the victim report to the police immediately?</label>
+        <select id="reported_immediately" name="reported_immediately" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="reported_same_day">Was the crime reported on the same day?</label>
+        <select id="reported_same_day" name="reported_same_day" required>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="details_of_incident">Details of Incident:</label><br>
+        <textarea id="details_of_incident" name="details_of_incident" required></textarea><br><br>
+
+        <label for="case_status">Status of the Case:</label>
+        <select id="case_status" name="case_status" required>
+            <option value="Yes">Is the perpetrator apprehended?</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="additional_comments">Additional Comments:</label><br>
+        <textarea id="additional_comments" name="additional_comments"></textarea><br><br>
+
+        <input type="submit" value="Submit Report">
+    </form>
+</body>
+</html>

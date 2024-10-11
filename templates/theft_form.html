@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theft Report Form</title>
+</head>
+<body>
+    <h1>Theft Report Form</h1>
+    <form action="/submit_theft_report" method="POST">
+        <label for="theft_id">Theft ID:</label>
+        <input type="text" id="theft_id" name="theft_id" required><br><br>
+
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" required><br><br>
+
+        <label for="time_of_incident">Time of Incident:</label>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required><br><br>
+
+        <label>Was a weapon involved?</label>
+        <input type="radio" id="weapon_yes" name="weapon_involved" value="Yes" required>
+        <label for="weapon_yes">Yes</label>
+        <input type="radio" id="weapon_no" name="weapon_involved" value="No" required>
+        <label for="weapon_no">No</label><br><br>
+
+        <label>Was the robbery violent?</label>
+        <input type="radio" id="violent_yes" name="robbery_violent" value="Yes" required>
+        <label for="violent_yes">Yes</label>
+        <input type="radio" id="violent_no" name="robbery_violent" value="No" required>
+        <label for="violent_no">No</label><br><br>
+
+        <label for="stolen_items">Description of Stolen Items:</label>
+        <textarea id="stolen_items" name="stolen_items" required></textarea><br><br>
+
+        <label for="crime_severity">Crime Severity:</label>
+        <select id="crime_severity" name="crime_severity" required>
+            <option value="Minor">Minor</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Serious">Serious</option>
+            <option value="Critical">Critical</option>
+        </select><br><br>
+
+        <label for="victim_age">Victim Age:</label>
+        <input type="number" id="victim_age" name="victim_age" required><br><br>
+
+        <label for="victim_gender">Victim Gender:</label>
+        <input type="text" id="victim_gender" name="victim_gender" required><br><br>
+
+        <label for="victim_occupation">Victim Occupation:</label>
+        <input type="text" id="victim_occupation" name="victim_occupation" required><br><br>
+
+        <label>Was there any witness?</label>
+        <input type="radio" id="witness_yes" name="witness_present" value="Yes" required>
+        <label for="witness_yes">Yes</label>
+        <input type="radio" id="witness_no" name="witness_present" value="No" required>
+        <label for="witness_no">No</label><br><br>
+
+        <label>Did the victim report to the police immediately?</label>
+        <input type="radio" id="report_yes" name="report_immediate" value="Yes" required>
+        <label for="report_yes">Yes</label>
+        <input type="radio" id="report_no" name="report_immediate" value="No" required>
+        <label for="report_no">No</label><br><br>
+
+        <label>Was the crime reported on the same day?</label>
+        <input type="radio" id="same_day_yes" name="reported_same_day" value="Yes" required>
+        <label for="same_day_yes">Yes</label>
+        <input type="radio" id="same_day_no" name="reported_same_day" value="No" required>
+        <label for="same_day_no">No</label><br><br>
+
+        <label for="additional_comments">Additional Comments:</label>
+        <textarea id="additional_comments" name="additional_comments"></textarea><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

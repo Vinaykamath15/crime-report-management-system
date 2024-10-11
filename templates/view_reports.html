@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Reports</title>
+</head>
+<body>
+    <h1>Reports</h1>
+
+    <!-- Murder Reports -->
+    <h2>Murder Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Murder ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in murder_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('murder_details', murder_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Assault Reports -->
+    <h2>Assault Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Assault ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in assault_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('assault_details', assault_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Theft Reports -->
+    <h2>Theft Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Theft ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in theft_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('theft_details', theft_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Fraud Reports -->
+    <h2>Fraud Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Fraud ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in fraud_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('fraud_details', fraud_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Sexual Assault Reports -->
+    <h2>Sexual Assault Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>SA ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in sa_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('sa_details', sa_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Domestic Violence Reports -->
+    <h2>Domestic Violence Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>DV ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in dv_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('dv_details', da_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Drug Offense Reports -->
+    <h2>Drug Offense Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Drug ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in drug_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('drug_details', drug_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Traffic Accident Reports -->
+    <h2>Traffic Accident Reports</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Traffic ID</th>
+                <th>Case Name</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in traffic_reports %}
+            <tr>
+                <td>{{ report[0] }}</td>
+                <td>{{ report[1] }}</td>
+                <td><a href="{{ url_for('traffic_details', traffic_id=report[0]) }}">View Details</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

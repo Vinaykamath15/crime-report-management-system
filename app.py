@@ -1,0 +1,608 @@
+from flask import Flask, request, session, redirect, url_for, render_template, flash
+import mysql.connector
+from werkzeug.security import generate_password_hash, check_password_hash
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+
+def get_db_connection():
+    return mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",  
+        password="dbmsproject101", 
+        database="crime_reports_db"
+    )
+
+
+
+db = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root", 
+    password="dbmsproject101",  
+    database="crime_reports_db"
+)
+
+# Routes
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = generate_password_hash(request.form['password'])
+
+        try:
+            cursor = db.cursor()
+            cursor.execute("INSERT INTO users (username, password_hash) VALUES (%s, %s)", (username, password))
+            db.commit()
+            cursor.close()
+            flash('You have successfully signed up!', 'success')
+            return redirect(url_for('login'))
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'danger')
+
+    return render_template('signup.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user and check_password_hash(user[2], password):  
+            session['user_id'] = user[0]  
+            flash('Login successful!', 'success')
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Login failed. Check your username and/or password.', 'danger')
+
+    return render_template('login.html')
+
+@app.route('/add_report')
+def add_report():
+    if 'user_id' in session:
+        return render_template('add_report.html')
+    return redirect(url_for('login'))
+
+@app.route('/murder_form')
+def murder_form():
+    return render_template('murder_form.html')
+
+@app.route('/assault_form')
+def assault_form():
+    return render_template('assault_form.html')
+
+@app.route('/theft_form')
+def theft_form():
+    return render_template('theft_form.html')
+
+@app.route('/sexual_assault_form')
+def sexual_assault_form():
+    return render_template('sexual_assault_form.html')
+
+@app.route('/domestic_violence_form')
+def domestic_violence_form():
+    return render_template('domestic_violence_form.html')
+
+@app.route('/drug_offense_form')
+def drug_offense_form():
+    return render_template('drug_offense_form.html')
+
+@app.route('/traffic_accidents_form')
+def traffic_accidents_form():
+    return render_template('traffic_accidents_form.html')
+
+@app.route('/submit_murder_report', methods=['POST'])
+def submit_murder_report():
+    if request.method == 'POST':
+        murder_id = request.form['murder_id']
+        case_name = request.form['case_name']
+        time_of_incident = request.form['time_of_incident']
+        location = request.form['location']
+        weapon_used = request.form['weapon_used']
+        victim_known = request.form['victim_known']
+        crime_severity = request.form['crime_severity']
+        victim_age = request.form['victim_age']
+        victim_gender = request.form['victim_gender']
+        victim_occupation = request.form['victim_occupation']
+        witness_present = request.form['witness_present']
+        reported_immediately = request.form['reported_immediately']
+        reported_same_day = request.form['reported_same_day']
+        details_of_incident = request.form['details_of_incident']
+        case_status = request.form['case_status']
+        additional_comments = request.form['additional_comments']
+
+        # Insert into the murder_reports table
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("""
+            INSERT INTO murder_reports (murder_id, case_name, time_of_incident, location, weapon_used, 
+            victim_known, crime_severity, victim_age, victim_gender, victim_occupation, 
+            witness_present, reported_immediately, reported_same_day, details_of_incident, case_status, additional_comments)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (murder_id, case_name, time_of_incident, location, weapon_used, victim_known, 
+              crime_severity, victim_age, victim_gender, victim_occupation, witness_present, 
+              reported_immediately, reported_same_day, details_of_incident, case_status, additional_comments))
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('view_reports'))
+    
+@app.route('/submit_assault_report', methods=['POST'])
+def submit_assault_report():
+    if request.method == 'POST':
+        assault_id = request.form['assault_id']
+        case_name = request.form['case_name']
+        time_of_incident = request.form['time_of_incident']
+        location = request.form['location']
+        crime_severity = request.form['crime_severity']
+        victim_age = request.form['victim_age']
+        victim_gender = request.form['victim_gender']
+        victim_occupation = request.form['victim_occupation']
+        witness_present = request.form['witness_present']
+        reported_immediately = request.form['reported_immediately']
+        reported_same_day = request.form['reported_same_day']
+        type_of_assault = request.form['type_of_assault']
+        injuries_reported = request.form['injuries_reported']
+        weapon_involved = request.form['weapon_involved']
+        details_of_incident = request.form['details_of_incident']
+        additional_comments = request.form['additional_comments']
+
+        # Insert into the assault_reports table
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("""
+            INSERT INTO assault_reports (assault_id, case_name, time_of_incident, location, crime_severity,
+            victim_age, victim_gender, victim_occupation, witness_present, reported_immediately,
+            reported_same_day, type_of_assault, injuries_reported, weapon_involved, details_of_incident,
+            additional_comments)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, (assault_id, case_name, time_of_incident, location, crime_severity, victim_age,
+              victim_gender, victim_occupation, witness_present, reported_immediately,
+              reported_same_day, type_of_assault, injuries_reported, weapon_involved,
+              details_of_incident, additional_comments))
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('view_reports'))
+    
+@app.route('/submit_theft_report', methods=['POST'])
+def submit_theft_report():
+    theft_id = request.form['theft_id']
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    weapon_involved = request.form['weapon_involved']
+    robbery_violent = request.form['robbery_violent']
+    stolen_items = request.form['stolen_items']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    witness_present = request.form['witness_present']
+    report_immediate = request.form['report_immediate']
+    reported_same_day = request.form['reported_same_day']
+    additional_comments = request.form['additional_comments']
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("""
+        INSERT INTO theft_reports (theft_id, case_name, time_of_incident, location, weapon_involved, robbery_violent, 
+                                   stolen_items, crime_severity, victim_age, victim_gender, victim_occupation, 
+                                   witness_present, report_immediate, reported_same_day, additional_comments)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """, (theft_id, case_name, time_of_incident, location, weapon_involved, robbery_violent, stolen_items, 
+          crime_severity, victim_age, victim_gender, victim_occupation, witness_present, report_immediate, 
+          reported_same_day, additional_comments))
+    
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect('/view_reports')
+
+@app.route('/submit_fraud_reports', methods=['GET', 'POST'])
+def fraud_form():
+    if request.method == 'POST':
+        fraud_id = request.form['fraud_id']
+        case_name = request.form['case_name']
+        time_of_incident = request.form['time_of_incident']
+        location = request.form['location']
+        type_of_fraud = request.form['type_of_fraud']
+        details_of_incident = request.form['details_of_incident']
+        crime_severity = request.form['crime_severity']
+        victim_age = request.form['victim_age']
+        victim_gender = request.form['victim_gender']
+        victim_occupation = request.form['victim_occupation']
+        witness = request.form['witness']
+        reported_same_day = request.form['reported_same_day']
+        additional_comments = request.form['additional_comments']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO fraud_reports (fraud_id, case_name, time_of_incident, location, type_of_fraud, 
+            details_of_incident, crime_severity, victim_age, victim_gender, victim_occupation, 
+            witness, reported_same_day, additional_comments) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (fraud_id, case_name, time_of_incident, location, type_of_fraud, details_of_incident,
+            crime_severity, victim_age, victim_gender, victim_occupation, witness, reported_same_day,
+            additional_comments)
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('view_reports'))
+
+    return render_template('fraud_form.html')
+
+@app.route('/submit_sa_report', methods=['GET', 'POST'])
+def submit_sa_report():
+    if request.method == 'POST':
+        sa_id = request.form['sa_id']
+        case_name = request.form['case_name']
+        time_of_incident = request.form['time_of_incident']
+        location = request.form['location']
+        relationship_to_perpetrator = request.form['relationship_to_perpetrator']
+        crime_severity = request.form['crime_severity']
+        victim_age = request.form['victim_age']
+        victim_gender = request.form['victim_gender']
+        victim_occupation = request.form['victim_occupation']
+        was_witness = request.form['was_witness']
+        reported_same_day = request.form['reported_same_day']
+        details_of_incident = request.form['details_of_incident']
+        additional_comments = request.form['additional_comments']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO sexual_assault_reports (sa_id, case_name, time_of_incident, location, relationship_to_perpetrator, 
+            crime_severity, victim_age, victim_gender, victim_occupation, was_witness, reported_same_day, 
+            details_of_incident, additional_comments) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (sa_id, case_name, time_of_incident, location, relationship_to_perpetrator, crime_severity,
+            victim_age, victim_gender, victim_occupation, was_witness, reported_same_day, details_of_incident, 
+            additional_comments)
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('view_reports'))
+
+    return render_template('sexual_assault_form.html')
+
+@app.route('/submit_dv_report', methods=['GET', 'POST'])
+def submit_dv_report():
+    if request.method == 'POST':
+        da_id = request.form['da_id']
+        case_name = request.form['case_name']
+        time_of_incident = request.form['time_of_incident']
+        location = request.form['location']
+        crime_severity = request.form['crime_severity']
+        type_of_abuse = request.form['type_of_abuse']
+        relationship_to_perpetrator = request.form['relationship_to_perpetrator']
+        victim_age = request.form['victim_age']
+        victim_gender = request.form['victim_gender']
+        victim_occupation = request.form['victim_occupation']
+        witness = request.form['witness']
+        reported_same_day = request.form['reported_same_day']
+        details_of_incident = request.form['details_of_incident']
+        victim_previously_harmed = request.form['victim_previously_harmed']
+        additional_comments = request.form['additional_comments']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO domestic_violence_reports (da_id, case_name, time_of_incident, location, 
+            crime_severity, type_of_abuse, relationship_to_perpetrator, victim_age, victim_gender, 
+            victim_occupation, witness, reported_same_day, details_of_incident, victim_previously_harmed, 
+            additional_comments) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+            (da_id, case_name, time_of_incident, location, crime_severity, type_of_abuse, relationship_to_perpetrator,
+            victim_age, victim_gender, victim_occupation, witness, reported_same_day, details_of_incident, 
+            victim_previously_harmed, additional_comments)
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('view_reports'))
+
+    return render_template('domestic_violence_form.html')
+
+@app.route('/submit_drug_offense_report', methods=['GET', 'POST'])
+def submit_drug_offense_report():
+    if request.method == 'POST':
+        drug_id = request.form['drug_id']
+        case_name = request.form['case_name']
+        incident_time = request.form['incident_time']
+        location = request.form['location']
+        drug_type = request.form['drug_type']
+        details = request.form['details']
+        severity = request.form['severity']
+        criminal_age = request.form['criminal_age']
+        criminal_gender = request.form['criminal_gender']
+        criminal_occupation = request.form['criminal_occupation']
+        witness = request.form['witness']
+        reported_same_day = request.form['reported_same_day']
+        quantity_seized = request.form['quantity_seized'] if request.form['quantity_seized'] else None
+        additional_comments = request.form['additional_comments']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        insert_query = """
+            INSERT INTO drug_offense_reports (drug_id, case_name, incident_time, location, drug_type, details, severity, criminal_age, criminal_gender, criminal_occupation, witness, reported_same_day, quantity_seized, additional_comments)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(insert_query, (drug_id, case_name, incident_time, location, drug_type, details, severity, criminal_age, criminal_gender, criminal_occupation, witness, reported_same_day, quantity_seized, additional_comments))
+
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('view_reports'))
+
+    return render_template('drug_offense_form.html')
+
+@app.route('/submit_traffic_accident_report', methods=['POST'])
+def submit_traffic_accident_report():
+    traffic_id = request.form['traffic_id']
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    injuries = request.form['injuries']
+    property_damage = request.form['property_damage']
+    alcohol_drugs_involved = request.form['alcohol_drugs_involved']
+    details_of_accident = request.form['details_of_accident']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    witness = request.form['witness']
+    same_day_report = request.form['same_day_report']
+    additional_comments = request.form['additional_comments']
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        INSERT INTO traffic_accident_reports (
+            traffic_id, case_name, time_of_incident, location, 
+            injuries, property_damage, alcohol_drugs_involved, 
+            details_of_accident, crime_severity, victim_age, 
+            victim_gender, victim_occupation, witness, same_day_report, 
+            additional_comments
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ''', (
+        traffic_id, case_name, time_of_incident, location, 
+        injuries, property_damage, alcohol_drugs_involved, 
+        details_of_accident, crime_severity, victim_age, 
+        victim_gender, victim_occupation, witness, same_day_report, 
+        additional_comments
+    ))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('view_reports'))
+
+
+
+@app.route('/view_reports')
+def view_reports():
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetching murder reports
+    cursor.execute("SELECT murder_id, case_name FROM murder_reports")
+    murder_reports = cursor.fetchall()
+
+    # Fetching assault reports
+    cursor.execute("SELECT assault_id, case_name FROM assault_reports")
+    assault_reports = cursor.fetchall()
+
+    # Fetching theft reports
+    cursor.execute("SELECT theft_id, case_name FROM theft_reports")
+    theft_reports = cursor.fetchall()
+
+    # Fetching fraud reports
+    cursor.execute("SELECT fraud_id, case_name FROM fraud_reports")
+    fraud_reports = cursor.fetchall()
+
+    # Fetching sexual assault reports
+    cursor.execute("SELECT sa_id, case_name FROM sexual_assault_reports")
+    sa_reports = cursor.fetchall()
+
+    # Fetching domestic violence reports
+    cursor.execute("SELECT da_id, case_name FROM domestic_violence_reports")
+    dv_reports = cursor.fetchall()
+
+    # Fetching drug offense reports
+    cursor.execute("SELECT drug_id, case_name FROM drug_offense_reports")
+    drug_reports = cursor.fetchall()
+
+    # Fetching traffic accident reports
+    cursor.execute("SELECT traffic_id, case_name FROM traffic_accident_reports")
+    traffic_reports = cursor.fetchall()
+
+    cursor.close()
+    connection.close()
+
+    return render_template(
+        'view_reports.html',
+        murder_reports=murder_reports,
+        assault_reports=assault_reports,
+        theft_reports=theft_reports,
+        fraud_reports=fraud_reports,
+        sa_reports=sa_reports,
+        dv_reports=dv_reports,
+        drug_reports=drug_reports,
+        traffic_reports=traffic_reports
+    )
+
+
+
+
+@app.route('/murder_details/<murder_id>')
+def murder_details(murder_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM murder_reports WHERE murder_id = %s", (murder_id,))
+    report = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404  
+
+    return render_template('murder_details.html', report=report)
+
+@app.route('/assault_details/<assault_id>')
+def assault_details(assault_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM assault_reports WHERE assault_id = %s", (assault_id,))
+    report = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404  
+
+    return render_template('assault_details.html', report=report)
+
+@app.route('/theft_details/<theft_id>')
+def theft_details(theft_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM theft_reports WHERE theft_id = %s", (theft_id,))
+    report = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404  
+
+    return render_template('theft_details.html', report=report)
+
+@app.route('/fraud_details/<fraud_id>')
+def fraud_details(fraud_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    cursor.execute("SELECT * FROM fraud_reports WHERE fraud_id = %s", (fraud_id,))
+    report = cursor.fetchone()
+    
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404  
+
+    return render_template('fraud_details.html', report=report)
+
+@app.route('/sa_details/<sa_id>')
+def sa_details(sa_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    cursor.execute("SELECT * FROM sexual_assault_reports WHERE sa_id = %s", (sa_id,))
+    report = cursor.fetchone()
+    
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404  
+
+    return render_template('sa_details.html', report=report)
+
+@app.route('/dv_details/<da_id>')
+def dv_details(da_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetching details for the domestic violence report by ID
+    cursor.execute("SELECT * FROM domestic_violence_reports WHERE da_id = %s", (da_id,))
+    report = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404  
+
+    return render_template('dv_details.html', report=report)
+
+@app.route('/drug_details/<drug_id>')
+def drug_details(drug_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetching details for the drug offense report by ID
+    cursor.execute("SELECT * FROM drug_offense_reports WHERE drug_id = %s", (drug_id,))
+    report = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404
+
+    return render_template('drug_offense_details.html', report=report)
+
+
+@app.route('/traffic_details/<traffic_id>')
+def traffic_details(traffic_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetching details for the traffic accident report by ID
+    cursor.execute("SELECT * FROM traffic_accident_reports WHERE traffic_id = %s", (traffic_id,))
+    report = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404
+
+    return render_template('traffic_accident_details.html', report=report)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('login'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
