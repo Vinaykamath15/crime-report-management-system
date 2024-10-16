@@ -597,6 +597,438 @@ def traffic_details(traffic_id):
 
     return render_template('traffic_accident_details.html', report=report)
 
+@app.route('/edit_murder/<murder_id>')
+def edit_murder(murder_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    # Fetch the existing data for the murder report
+    cursor.execute("SELECT * FROM murder_reports WHERE murder_id = %s", (murder_id,))
+    report = cursor.fetchone()
+    
+    cursor.close()
+    connection.close()
+    
+    if report is None:
+        return "Report not found", 404
+    
+    return render_template('edit_murder.html', report=report, murder_id=murder_id)
+
+@app.route('/update_murder/<murder_id>', methods=['POST'])
+def update_murder(murder_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get updated data from form
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    weapon_used = request.form['weapon_used']
+    victim_known = request.form['victim_known']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    witness_present = request.form['witness_present']
+    reported_immediately = request.form['reported_immediately']  # Updated to match form
+    reported_same_day = request.form['reported_same_day']
+    details_of_incident = request.form['details_of_incident']
+    case_status = request.form['case_status']
+    additional_comments = request.form['additional_comments']
+
+    # Update the murder report in the database
+    cursor.execute("""
+        UPDATE murder_reports
+        SET case_name = %s, time_of_incident = %s, location = %s, weapon_used = %s, victim_known = %s,
+            crime_severity = %s, victim_age = %s, victim_gender = %s, victim_occupation = %s, witness_present = %s,
+            reported_immediately = %s, reported_same_day = %s, details_of_incident = %s, case_status = %s, additional_comments = %s
+        WHERE murder_id = %s
+    """, (case_name, time_of_incident, location, weapon_used, victim_known, crime_severity, victim_age, victim_gender,
+          victim_occupation, witness_present, reported_immediately, reported_same_day, details_of_incident, case_status, additional_comments, murder_id))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('murder_details', murder_id=murder_id))
+
+@app.route('/edit_assault/<assault_id>')
+def edit_assault(assault_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    # Fetch the existing data for the assault report
+    cursor.execute("SELECT * FROM assault_reports WHERE assault_id = %s", (assault_id,))
+    report = cursor.fetchone()
+    
+    cursor.close()
+    connection.close()
+    
+    if report is None:
+        return "Report not found", 404
+    
+    return render_template('edit_assault.html', report=report, assault_id=assault_id)
+
+@app.route('/update_assault/<assault_id>', methods=['POST'])
+def update_assault(assault_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get updated data from form
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    witness_present = request.form['witness_present']
+    reported_immediately = request.form['reported_immediately']
+    reported_same_day = request.form['reported_same_day']
+    type_of_assault = request.form['type_of_assault']
+    injuries_reported = request.form['injuries_reported']
+    weapon_involved = request.form['weapon_involved']
+    details_of_incident = request.form['details_of_incident']
+    additional_comments = request.form['additional_comments']
+
+    # Update the assault report in the database
+    cursor.execute("""
+        UPDATE assault_reports
+        SET case_name = %s, time_of_incident = %s, location = %s, crime_severity = %s, victim_age = %s, victim_gender = %s,
+            victim_occupation = %s, witness_present = %s, reported_immediately = %s, reported_same_day = %s, 
+            type_of_assault = %s, injuries_reported = %s, weapon_involved = %s, details_of_incident = %s, additional_comments = %s
+        WHERE assault_id = %s
+    """, (case_name, time_of_incident, location, crime_severity, victim_age, victim_gender, victim_occupation, 
+          witness_present, reported_immediately, reported_same_day, type_of_assault, injuries_reported, weapon_involved, 
+          details_of_incident, additional_comments, assault_id))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('assault_details', assault_id=assault_id))
+
+@app.route('/edit_theft/<theft_id>')
+def edit_theft(theft_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetch the existing data for the theft report
+    cursor.execute("SELECT * FROM theft_reports WHERE theft_id = %s", (theft_id,))
+    report = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404
+
+    return render_template('edit_theft.html', report=report, theft_id=theft_id)
+
+@app.route('/update_theft/<theft_id>', methods=['POST'])
+def update_theft(theft_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get updated data from form
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    weapon_involved = request.form['weapon_involved']
+    robbery_violent = request.form['robbery_violent']
+    stolen_items = request.form['stolen_items']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    witness_present = request.form['witness_present']
+    report_immediate = request.form['report_immediate']
+    reported_same_day = request.form['reported_same_day']
+    additional_comments = request.form['additional_comments']
+
+    # Update the theft report in the database
+    cursor.execute("""
+        UPDATE theft_reports
+        SET case_name = %s, time_of_incident = %s, location = %s, weapon_involved = %s, robbery_violent = %s,
+            stolen_items = %s, crime_severity = %s, victim_age = %s, victim_gender = %s, victim_occupation = %s,
+            witness_present = %s, report_immediate = %s, reported_same_day = %s, additional_comments = %s
+        WHERE theft_id = %s
+    """, (case_name, time_of_incident, location, weapon_involved, robbery_violent, stolen_items, crime_severity, 
+          victim_age, victim_gender, victim_occupation, witness_present, report_immediate, reported_same_day, 
+          additional_comments, theft_id))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('theft_details', theft_id=theft_id))
+
+@app.route('/edit_fraud/<fraud_id>')
+def edit_fraud(fraud_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetch the existing data for the fraud report
+    cursor.execute("SELECT * FROM fraud_reports WHERE fraud_id = %s", (fraud_id,))
+    report = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404
+
+    return render_template('edit_fraud.html', report=report, fraud_id=fraud_id)
+
+@app.route('/update_fraud/<fraud_id>', methods=['POST'])
+def update_fraud(fraud_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get updated data from form
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    type_of_fraud = request.form['type_of_fraud']
+    details_of_incident = request.form['details_of_incident']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    witness = request.form['witness']
+    reported_same_day = request.form['reported_same_day']
+    additional_comments = request.form['additional_comments']
+
+    # Update the fraud report in the database
+    cursor.execute("""
+        UPDATE fraud_reports
+        SET case_name = %s, time_of_incident = %s, location = %s, type_of_fraud = %s, details_of_incident = %s,
+            crime_severity = %s, victim_age = %s, victim_gender = %s, victim_occupation = %s, witness = %s,
+            reported_same_day = %s, additional_comments = %s
+        WHERE fraud_id = %s
+    """, (case_name, time_of_incident, location, type_of_fraud, details_of_incident, crime_severity, victim_age,
+          victim_gender, victim_occupation, witness, reported_same_day, additional_comments, fraud_id))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('fraud_details', fraud_id=fraud_id))
+
+@app.route('/edit_sa/<sa_id>')
+def edit_sa(sa_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetch the existing data for the sexual assault report
+    cursor.execute("SELECT * FROM sexual_assault_reports WHERE sa_id = %s", (sa_id,))
+    report = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404
+
+    return render_template('edit_sa.html', report=report, sa_id=sa_id)
+
+@app.route('/update_sa/<sa_id>', methods=['POST'])
+def update_sa(sa_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get updated data from the form
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    relationship_to_perpetrator = request.form['relationship_to_perpetrator']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    was_witness = request.form['was_witness']
+    reported_same_day = request.form['reported_same_day']
+    details_of_incident = request.form['details_of_incident']
+    additional_comments = request.form['additional_comments']
+
+    # Update the sexual assault report in the database
+    cursor.execute("""
+        UPDATE sexual_assault_reports
+        SET case_name = %s, time_of_incident = %s, location = %s, relationship_to_perpetrator = %s, 
+            crime_severity = %s, victim_age = %s, victim_gender = %s, victim_occupation = %s,
+            was_witness = %s, reported_same_day = %s, details_of_incident = %s, additional_comments = %s
+        WHERE sa_id = %s
+    """, (case_name, time_of_incident, location, relationship_to_perpetrator, crime_severity, victim_age, victim_gender,
+          victim_occupation, was_witness, reported_same_day, details_of_incident, additional_comments, sa_id))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('sa_details', sa_id=sa_id))
+
+@app.route('/edit_dv/<da_id>', methods=['GET', 'POST'])
+def edit_dv(da_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    if request.method == 'POST':
+        # Get the updated form data
+        case_name = request.form['case_name']
+        time_of_incident = request.form['time_of_incident']
+        location = request.form['location']
+        crime_severity = request.form['crime_severity']
+        type_of_abuse = request.form['type_of_abuse']
+        relationship_to_perpetrator = request.form['relationship_to_perpetrator']
+        victim_age = request.form['victim_age']
+        victim_gender = request.form['victim_gender']
+        victim_occupation = request.form['victim_occupation']
+        witness = request.form['witness']
+        reported_same_day = request.form['reported_same_day']
+        details_of_incident = request.form['details_of_incident']
+        victim_previously_harmed = request.form['victim_previously_harmed']
+        additional_comments = request.form['additional_comments']
+
+        # Update the database record
+        cursor.execute(
+            """
+            UPDATE domestic_violence_reports
+            SET case_name = %s, time_of_incident = %s, location = %s, crime_severity = %s, 
+                type_of_abuse = %s, relationship_to_perpetrator = %s, victim_age = %s, victim_gender = %s, 
+                victim_occupation = %s, witness = %s, reported_same_day = %s, details_of_incident = %s, 
+                victim_previously_harmed = %s, additional_comments = %s
+            WHERE da_id = %s
+            """,
+            (
+                case_name, time_of_incident, location, crime_severity, type_of_abuse, relationship_to_perpetrator,
+                victim_age, victim_gender, victim_occupation, witness, reported_same_day, details_of_incident,
+                victim_previously_harmed, additional_comments, da_id
+            )
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('dv_details', da_id=da_id))
+
+    # Fetch the current report details for pre-filling the form
+    cursor.execute("SELECT * FROM domestic_violence_reports WHERE da_id = %s", (da_id,))
+    report = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    return render_template('edit_dv.html', report=report)
+
+@app.route('/edit_drug_offense/<drug_id>', methods=['GET', 'POST'])
+def edit_drug_offense(drug_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    if request.method == 'POST':
+        # Get the updated form data
+        case_name = request.form['case_name']
+        incident_time = request.form['incident_time']
+        location = request.form['location']
+        drug_type = request.form['drug_type']
+        details = request.form['details']
+        severity = request.form['severity']
+        criminal_age = request.form['criminal_age']
+        criminal_gender = request.form['criminal_gender']
+        criminal_occupation = request.form['criminal_occupation']
+        witness = request.form['witness']
+        reported_same_day = request.form['reported_same_day']
+        quantity_seized = request.form['quantity_seized']
+        additional_comments = request.form['additional_comments']
+
+        # Update the database record
+        cursor.execute(
+            """
+            UPDATE drug_offense_reports
+            SET case_name = %s, incident_time = %s, location = %s, drug_type = %s, details = %s,
+                severity = %s, criminal_age = %s, criminal_gender = %s, criminal_occupation = %s,
+                witness = %s, reported_same_day = %s, quantity_seized = %s, additional_comments = %s
+            WHERE drug_id = %s
+            """,
+            (
+                case_name, incident_time, location, drug_type, details, severity, criminal_age, criminal_gender,
+                criminal_occupation, witness, reported_same_day, quantity_seized, additional_comments, drug_id
+            )
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        return redirect(url_for('drug_details', drug_id=drug_id))
+
+    # Fetch the current report details for pre-filling the form
+    cursor.execute("SELECT * FROM drug_offense_reports WHERE drug_id = %s", (drug_id,))
+    report = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    return render_template('edit_drug_offense.html', report=report)
+
+@app.route('/edit_traffic_accident/<traffic_id>')
+def edit_traffic_accident(traffic_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Fetch the existing data for the traffic accident report
+    cursor.execute("SELECT * FROM traffic_accident_reports WHERE traffic_id = %s", (traffic_id,))
+    report = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+
+    if report is None:
+        return "Report not found", 404
+
+    # Pass the fetched report to the template for editing
+    return render_template('edit_traffic_accident.html', report=report, traffic_id=traffic_id)
+
+@app.route('/update_traffic_accident/<traffic_id>', methods=['POST'])
+def update_traffic_accident(traffic_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get updated data from the form
+    case_name = request.form['case_name']
+    time_of_incident = request.form['time_of_incident']
+    location = request.form['location']
+    injuries = request.form['injuries']
+    property_damage = request.form['property_damage']
+    alcohol_drugs_involved = request.form['alcohol_drugs_involved']
+    details_of_accident = request.form['details_of_accident']
+    crime_severity = request.form['crime_severity']
+    victim_age = request.form['victim_age']
+    victim_gender = request.form['victim_gender']
+    victim_occupation = request.form['victim_occupation']
+    witness = request.form['witness']
+    same_day_report = request.form['same_day_report']
+    additional_comments = request.form['additional_comments']
+
+    # Update the traffic accident report in the database
+    cursor.execute("""
+        UPDATE traffic_accident_reports
+        SET case_name = %s, time_of_incident = %s, location = %s, injuries = %s,
+            property_damage = %s, alcohol_drugs_involved = %s, details_of_accident = %s,
+            crime_severity = %s, victim_age = %s, victim_gender = %s,
+            victim_occupation = %s, witness = %s, same_day_report = %s,
+            additional_comments = %s
+        WHERE traffic_id = %s
+    """, (case_name, time_of_incident, location, injuries, property_damage,
+          alcohol_drugs_involved, details_of_accident, crime_severity, victim_age,
+          victim_gender, victim_occupation, witness, same_day_report,
+          additional_comments, traffic_id))
+
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+    return redirect(url_for('traffic_details', traffic_id=traffic_id))
+
+
+
 
 @app.route('/logout')
 def logout():

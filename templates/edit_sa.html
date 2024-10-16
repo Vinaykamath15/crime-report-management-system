@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Sexual Assault Report</title>
+</head>
+<body>
+    <h1>Edit Sexual Assault Report</h1>
+    <form action="{{ url_for('update_sa', sa_id=sa_id) }}" method="POST">
+        <label>Case Name:</label><br>
+        <input type="text" name="case_name" value="{{ report[1] }}" required><br><br>
+
+        <label>Time of Incident:</label><br>
+        <input type="datetime-local" name="time_of_incident" value="{{ report[2] }}" required><br><br>
+
+        <label>Location:</label><br>
+        <input type="text" name="location" value="{{ report[3] }}" required><br><br>
+
+        <label>Relationship to Perpetrator:</label><br>
+        <select name="relationship_to_perpetrator" required>
+            <option value="Stranger" {% if report[4] == 'Stranger' %}selected{% endif %}>Stranger</option>
+            <option value="Acquaintance" {% if report[4] == 'Acquaintance' %}selected{% endif %}>Acquaintance</option>
+            <option value="Partner" {% if report[4] == 'Partner' %}selected{% endif %}>Partner</option>
+            <option value="Family" {% if report[4] == 'Family' %}selected{% endif %}>Family</option>
+        </select><br><br>
+
+        <label>Crime Severity:</label><br>
+        <select name="crime_severity" required>
+            <option value="Minor" {% if report[5] == 'Minor' %}selected{% endif %}>Minor</option>
+            <option value="Moderate" {% if report[5] == 'Moderate' %}selected{% endif %}>Moderate</option>
+            <option value="Serious" {% if report[5] == 'Serious' %}selected{% endif %}>Serious</option>
+            <option value="Critical" {% if report[5] == 'Critical' %}selected{% endif %}>Critical</option>
+        </select><br><br>
+
+        <label>Victim Age:</label><br>
+        <input type="number" name="victim_age" value="{{ report[6] }}" required><br><br>
+
+        <label>Victim Gender:</label><br>
+        <select name="victim_gender" required>
+            <option value="Male" {% if report[7] == 'Male' %}selected{% endif %}>Male</option>
+            <option value="Female" {% if report[7] == 'Female' %}selected{% endif %}>Female</option>
+            <option value="Other" {% if report[7] == 'Other' %}selected{% endif %}>Other</option>
+        </select><br><br>
+
+        <label>Victim Occupation:</label><br>
+        <input type="text" name="victim_occupation" value="{{ report[8] }}" required><br><br>
+
+        <label>Was a Witness Present?</label><br>
+        <select name="was_witness" required>
+            <option value="Yes" {% if report[9] == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if report[9] == 'No' %}selected{% endif %}>No</option>
+        </select><br><br>
+
+        <label>Was the Crime Reported on the Same Day?</label><br>
+        <select name="reported_same_day" required>
+            <option value="Yes" {% if report[10] == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if report[10] == 'No' %}selected{% endif %}>No</option>
+        </select><br><br>
+
+        <label>Details of Incident:</label><br>
+        <textarea name="details_of_incident" required>{{ report[11] }}</textarea><br><br>
+
+        <label>Additional Comments:</label><br>
+        <textarea name="additional_comments">{{ report[12] }}</textarea><br><br>
+
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

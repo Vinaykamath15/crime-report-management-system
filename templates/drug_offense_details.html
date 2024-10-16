@@ -21,6 +21,7 @@
     <p><strong>Was the crime reported on the same day?</strong> {{ report[11] }}</p>
     <p><strong>Quantity of Drugs Seized:</strong> {{ report[12] }}</p>
     <p><strong>Additional Comments:</strong> {{ report[13] }}</p>
+    <a href="{{ url_for('edit_drug_offense', drug_id=report[0]) }}">Edit Report</a>
     <a href="{{ url_for('view_reports') }}">Back to Reports</a>
 </body>
 </html>

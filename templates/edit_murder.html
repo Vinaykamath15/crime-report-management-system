@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Murder Report</title>
+</head>
+<body>
+    <h1>Edit Murder Report</h1>
+    <form action="{{ url_for('update_murder', murder_id=murder_id) }}" method="POST">
+        <label>Case Name:</label><br>
+        <input type="text" name="case_name" value="{{ report[1] }}" required><br><br>
+
+        <label>Time of Incident:</label><br>
+        <input type="datetime-local" name="time_of_incident" value="{{ report[2] }}" required><br><br>
+
+        <label>Location:</label><br>
+        <input type="text" name="location" value="{{ report[3] }}" required><br><br>
+
+        <label>Weapon Used:</label><br>
+        <input type="text" name="weapon_used" value="{{ report[4] }}" required><br><br>
+
+        <label>Victim Known to Perpetrator:</label><br>
+        <input type="text" name="victim_known" value="{{ report[5] }}" required><br><br>
+
+        <label>Crime Severity:</label><br>
+        <input type="text" name="crime_severity" value="{{ report[6] }}" required><br><br>
+
+        <label>Victim Age:</label><br>
+        <input type="number" name="victim_age" value="{{ report[7] }}" required><br><br>
+
+        <label>Victim Gender:</label><br>
+        <input type="text" name="victim_gender" value="{{ report[8] }}" required><br><br>
+
+        <label>Victim Occupation:</label><br>
+        <input type="text" name="victim_occupation" value="{{ report[9] }}" required><br><br>
+
+        <label>Witness:</label><br>
+        <select name="witness_present" required>
+            <option value="Yes" {% if report[10] == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if report[10] == 'No' %}selected{% endif %}>No</option>
+        </select><br><br>
+
+        <label>Report Immediate:</label><br>
+        <select name="reported_immediately" required>
+            <option value="Yes" {% if report[11] == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if report[11] == 'No' %}selected{% endif %}>No</option>
+        </select><br><br>
+
+        <label>Same Day Report:</label><br>
+        <select name="reported_same_day" required>
+            <option value="Yes" {% if report[12] == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if report[12] == 'No' %}selected{% endif %}>No</option>
+        </select><br><br>
+
+        <label>Details of Incident:</label><br>
+        <textarea name="details_of_incident" required>{{ report[13] }}</textarea><br><br>
+
+        <label>Case Status:</label><br>
+        <select name="case_status" required>
+            <option value="Yes" {% if report[14] == 'Yes' %}selected{% endif %}>Is the perpetrator apprehended?</option>
+            <option value="No" {% if report[14] == 'No' %}selected{% endif %}>No</option>
+        </select><br><br>
+
+        <label>Additional Comments:</label><br>
+        <textarea name="additional_comments">{{ report[15] }}</textarea><br><br>
+
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Domestic Violence Report</title>
+</head>
+<body>
+    <h1>Edit Domestic Violence Report</h1>
+    <form action="{{ url_for('edit_dv', da_id=report[0]) }}" method="POST">
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" value="{{ report[1] }}" required><br><br>
+
+        <label for="time_of_incident">Time of Incident:</label>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" value="{{ report[2].strftime('%Y-%m-%dT%H:%M') }}" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="{{ report[3] }}" required><br><br>
+
+        <label for="crime_severity">Crime Severity:</label>
+        <input type="text" id="crime_severity" name="crime_severity" value="{{ report[4] }}" required><br><br>
+
+        <label for="type_of_abuse">Type of Abuse:</label>
+        <input type="text" id="type_of_abuse" name="type_of_abuse" value="{{ report[5] }}" required><br><br>
+
+        <label for="relationship_to_perpetrator">Relationship to Perpetrator:</label>
+        <input type="text" id="relationship_to_perpetrator" name="relationship_to_perpetrator" value="{{ report[6] }}" required><br><br>
+
+        <label for="victim_age">Victim Age:</label>
+        <input type="number" id="victim_age" name="victim_age" value="{{ report[7] }}" required><br><br>
+
+        <label for="victim_gender">Victim Gender:</label>
+        <input type="text" id="victim_gender" name="victim_gender" value="{{ report[8] }}" required><br><br>
+
+        <label for="victim_occupation">Victim Occupation:</label>
+        <input type="text" id="victim_occupation" name="victim_occupation" value="{{ report[9] }}" required><br><br>
+
+        <label for="witness">Was there a witness?</label>
+        <input type="text" id="witness" name="witness" value="{{ report[10] }}" required><br><br>
+
+        <label for="reported_same_day">Reported on the Same Day:</label>
+        <input type="text" id="reported_same_day" name="reported_same_day" value="{{ report[11] }}" required><br><br>
+
+        <label for="details_of_incident">Details of Incident:</label>
+        <textarea id="details_of_incident" name="details_of_incident" required>{{ report[12] }}</textarea><br><br>
+
+        <label for="victim_previously_harmed">Victim Previously Harmed:</label>
+        <input type="text" id="victim_previously_harmed" name="victim_previously_harmed" value="{{ report[13] }}" required><br><br>
+
+        <label for="additional_comments">Additional Comments:</label>
+        <textarea id="additional_comments" name="additional_comments">{{ report[14] }}</textarea><br><br>
+
+        <input type="submit" value="Update Report">
+    </form>
+    <a href="{{ url_for('view_reports') }}">Back to Reports</a>
+</body>
+</html>

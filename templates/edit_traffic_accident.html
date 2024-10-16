@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Traffic Accident Report</title>
+</head>
+<body>
+    <h1>Edit Traffic Accident Report</h1>
+    <form action="{{ url_for('update_traffic_accident', traffic_id=traffic_id) }}" method="POST">
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" value="{{ report[1] }}" required><br>
+
+        <label for="time_of_incident">Time of Incident:</label>
+        <input type="datetime-local" id="time_of_incident" name="time_of_incident" value="{{ report[2] }}" required><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="{{ report[3] }}" required><br>
+
+        <label for="injuries">Injuries (Yes/No):</label>
+        <input type="text" id="injuries" name="injuries" value="{{ report[4] }}" required><br>
+
+        <label for="property_damage">Property Damage (Yes/No):</label>
+        <input type="text" id="property_damage" name="property_damage" value="{{ report[5] }}" required><br>
+
+        <label for="alcohol_drugs_involved">Alcohol/Drugs Involved (Yes/No):</label>
+        <input type="text" id="alcohol_drugs_involved" name="alcohol_drugs_involved" value="{{ report[6] }}" required><br>
+
+        <label for="details_of_accident">Details of Accident:</label>
+        <textarea id="details_of_accident" name="details_of_accident" required>{{ report[7] }}</textarea><br>
+
+        <label for="crime_severity">Crime Severity:</label>
+        <input type="text" id="crime_severity" name="crime_severity" value="{{ report[8] }}" required><br>
+
+        <label for="victim_age">Victim Age:</label>
+        <input type="number" id="victim_age" name="victim_age" value="{{ report[9] }}" required><br>
+
+        <label for="victim_gender">Victim Gender:</label>
+        <input type="text" id="victim_gender" name="victim_gender" value="{{ report[10] }}" required><br>
+
+        <label for="victim_occupation">Victim Occupation:</label>
+        <input type="text" id="victim_occupation" name="victim_occupation" value="{{ report[11] }}" required><br>
+
+        <label for="witness">Witness (Yes/No):</label>
+        <input type="text" id="witness" name="witness" value="{{ report[12] }}" required><br>
+
+        <label for="same_day_report">Reported Same Day (Yes/No):</label>
+        <input type="text" id="same_day_report" name="same_day_report" value="{{ report[13] }}" required><br>
+
+        <label for="additional_comments">Additional Comments:</label>
+        <textarea id="additional_comments" name="additional_comments">{{ report[14] }}</textarea><br>
+
+        <button type="submit">Update Report</button>
+    </form>
+    <a href="{{ url_for('traffic_details', traffic_id=traffic_id) }}">Back to Details</a>
+</body>
+</html>
+

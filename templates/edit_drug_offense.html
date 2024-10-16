@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Drug Offense Report</title>
+</head>
+<body>
+    <h1>Edit Drug Offense Report</h1>
+    <form action="{{ url_for('edit_drug_offense', drug_id=report[0]) }}" method="POST">
+        <label for="case_name">Case Name:</label>
+        <input type="text" id="case_name" name="case_name" value="{{ report[1] }}" required><br><br>
+
+        <label for="incident_time">Time of Incident:</label>
+        <input type="datetime-local" id="incident_time" name="incident_time" value="{{ report[2].strftime('%Y-%m-%dT%H:%M') }}" required><br><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="{{ report[3] }}" required><br><br>
+
+        <label for="drug_type">Drug Type:</label>
+        <input type="text" id="drug_type" name="drug_type" value="{{ report[4] }}" required><br><br>
+
+        <label for="details">Details:</label>
+        <textarea id="details" name="details" required>{{ report[5] }}</textarea><br><br>
+
+        <label for="severity">Severity:</label>
+        <input type="text" id="severity" name="severity" value="{{ report[6] }}" required><br><br>
+
+        <label for="criminal_age">Criminal Age:</label>
+        <input type="number" id="criminal_age" name="criminal_age" value="{{ report[7] }}" required><br><br>
+
+        <label for="criminal_gender">Criminal Gender:</label>
+        <input type="text" id="criminal_gender" name="criminal_gender" value="{{ report[8] }}" required><br><br>
+
+        <label for="criminal_occupation">Criminal Occupation:</label>
+        <input type="text" id="criminal_occupation" name="criminal_occupation" value="{{ report[9] }}" required><br><br>
+
+        <label for="witness">Was there a witness?</label>
+        <input type="text" id="witness" name="witness" value="{{ report[10] }}" required><br><br>
+
+        <label for="reported_same_day">Reported on the Same Day:</label>
+        <input type="text" id="reported_same_day" name="reported_same_day" value="{{ report[11] }}" required><br><br>
+
+        <label for="quantity_seized">Quantity Seized (kg):</label>
+        <input type="number" step="0.01" id="quantity_seized" name="quantity_seized" value="{{ report[12] }}"><br><br>
+
+        <label for="additional_comments">Additional Comments:</label>
+        <textarea id="additional_comments" name="additional_comments">{{ report[13] }}</textarea><br><br>
+
+        <input type="submit" value="Update Report">
+    </form>
+    <a href="{{ url_for('view_reports') }}">Back to Reports</a>
+</body>
+</html>
