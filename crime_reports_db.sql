@@ -3,8 +3,7 @@ use crime_reports_db;
 
 use crime_reports_db;
 SET SQL_SAFE_UPDATES = 0;
-DELETE FROM assault_reports;
-DELETE FROM murder_reports;
+DELETE FROM users;
 
 
 CREATE TABLE users (

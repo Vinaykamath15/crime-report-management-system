@@ -62,14 +62,18 @@ def login():
         user = cursor.fetchone()
         cursor.close()
 
-        if user and check_password_hash(user[2], password):  
-            session['user_id'] = user[0]  
-            flash('Login successful!', 'success')
-            return redirect(url_for('dashboard'))
+        if user:  
+            if check_password_hash(user[2], password):  # Assuming user[2] is the password hash
+                session['user_id'] = user[0]  
+                flash('Login successful!', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Error: Invalid password.', 'danger')  # Incorrect password
         else:
-            flash('Login failed. Check your username and/or password.', 'danger')
+            flash('Error: Username not found.', 'danger')  # Username doesn't exist
 
     return render_template('login.html')
+
 
 @app.route('/add_report')
 def add_report():
@@ -415,43 +419,91 @@ def submit_traffic_accident_report():
     return redirect(url_for('view_reports'))
 
 
-
-@app.route('/view_reports')
+@app.route('/view_reports', methods=['GET'])
 def view_reports():
     connection = get_db_connection()
     cursor = connection.cursor()
 
-    # Fetching murder reports
-    cursor.execute("SELECT murder_id, case_name FROM murder_reports")
-    murder_reports = cursor.fetchall()
+    search_query = request.args.get('search', '')
 
-    # Fetching assault reports
-    cursor.execute("SELECT assault_id, case_name FROM assault_reports")
-    assault_reports = cursor.fetchall()
+    # If there is a search query, modify the SQL queries to filter by case_id or case_name
+    if search_query:
+        search_query = f"%{search_query}%"
+        
+        # Search by case_name or case_id
+        cursor.execute("""
+            SELECT murder_id, case_name FROM murder_reports 
+            WHERE murder_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        murder_reports = cursor.fetchall()
 
-    # Fetching theft reports
-    cursor.execute("SELECT theft_id, case_name FROM theft_reports")
-    theft_reports = cursor.fetchall()
+        cursor.execute("""
+            SELECT assault_id, case_name FROM assault_reports 
+            WHERE assault_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        assault_reports = cursor.fetchall()
 
-    # Fetching fraud reports
-    cursor.execute("SELECT fraud_id, case_name FROM fraud_reports")
-    fraud_reports = cursor.fetchall()
+        cursor.execute("""
+            SELECT theft_id, case_name FROM theft_reports 
+            WHERE theft_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        theft_reports = cursor.fetchall()
 
-    # Fetching sexual assault reports
-    cursor.execute("SELECT sa_id, case_name FROM sexual_assault_reports")
-    sa_reports = cursor.fetchall()
+        cursor.execute("""
+            SELECT fraud_id, case_name FROM fraud_reports 
+            WHERE fraud_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        fraud_reports = cursor.fetchall()
 
-    # Fetching domestic violence reports
-    cursor.execute("SELECT da_id, case_name FROM domestic_violence_reports")
-    dv_reports = cursor.fetchall()
+        cursor.execute("""
+            SELECT sa_id, case_name FROM sexual_assault_reports 
+            WHERE sa_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        sa_reports = cursor.fetchall()
 
-    # Fetching drug offense reports
-    cursor.execute("SELECT drug_id, case_name FROM drug_offense_reports")
-    drug_reports = cursor.fetchall()
+        cursor.execute("""
+            SELECT da_id, case_name FROM domestic_violence_reports 
+            WHERE da_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        dv_reports = cursor.fetchall()
 
-    # Fetching traffic accident reports
-    cursor.execute("SELECT traffic_id, case_name FROM traffic_accident_reports")
-    traffic_reports = cursor.fetchall()
+        cursor.execute("""
+            SELECT drug_id, case_name FROM drug_offense_reports 
+            WHERE drug_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        drug_reports = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT traffic_id, case_name FROM traffic_accident_reports 
+            WHERE traffic_id LIKE %s OR case_name LIKE %s
+        """, (search_query, search_query))
+        traffic_reports = cursor.fetchall()
+
+    else:
+        # Fetch all reports if no search query is present
+        cursor.execute("SELECT murder_id, case_name FROM murder_reports")
+        murder_reports = cursor.fetchall()
+
+        cursor.execute("SELECT assault_id, case_name FROM assault_reports")
+        assault_reports = cursor.fetchall()
+
+        cursor.execute("SELECT theft_id, case_name FROM theft_reports")
+        theft_reports = cursor.fetchall()
+
+        cursor.execute("SELECT fraud_id, case_name FROM fraud_reports")
+        fraud_reports = cursor.fetchall()
+
+        cursor.execute("SELECT sa_id, case_name FROM sexual_assault_reports")
+        sa_reports = cursor.fetchall()
+
+        cursor.execute("SELECT da_id, case_name FROM domestic_violence_reports")
+        dv_reports = cursor.fetchall()
+
+        cursor.execute("SELECT drug_id, case_name FROM drug_offense_reports")
+        drug_reports = cursor.fetchall()
+
+        cursor.execute("SELECT traffic_id, case_name FROM traffic_accident_reports")
+        traffic_reports = cursor.fetchall()
 
     cursor.close()
     connection.close()
@@ -467,6 +519,7 @@ def view_reports():
         drug_reports=drug_reports,
         traffic_reports=traffic_reports
     )
+
 
 
 
@@ -1027,6 +1080,151 @@ def update_traffic_accident(traffic_id):
 
     return redirect(url_for('traffic_details', traffic_id=traffic_id))
 
+@app.route('/delete_murder/<murder_id>', methods=['POST'])
+def delete_murder(murder_id):
+    if 'user_id' in session:  # Ensure that the user is logged in
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the murder report
+            cursor.execute("DELETE FROM murder_reports WHERE murder_id = %s", (murder_id,))
+            connection.commit()
+            flash('Murder report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
+
+@app.route('/delete_assault/<assault_id>', methods=['POST'])
+def delete_assault(assault_id):
+    if 'user_id' in session:
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the assault report
+            cursor.execute("DELETE FROM assault_reports WHERE assault_id = %s", (assault_id,))
+            connection.commit()
+            flash('Assault report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
+
+@app.route('/delete_theft/<theft_id>', methods=['POST'])
+def delete_theft(theft_id):
+    if 'user_id' in session:
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the theft report
+            cursor.execute("DELETE FROM theft_reports WHERE theft_id = %s", (theft_id,))
+            connection.commit()
+            flash('Theft report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
+
+@app.route('/delete_fraud/<fraud_id>', methods=['POST'])
+def delete_fraud(fraud_id):
+    if 'user_id' in session:
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the fraud report
+            cursor.execute("DELETE FROM fraud_reports WHERE fraud_id = %s", (fraud_id,))
+            connection.commit()
+            flash('Fraud report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
+
+@app.route('/delete_sa/<sa_id>', methods=['POST'])
+def delete_sa(sa_id):
+    if 'user_id' in session:
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the sexual assault report
+            cursor.execute("DELETE FROM sexual_assault_reports WHERE sa_id = %s", (sa_id,))
+            connection.commit()
+            flash('Sexual assault report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
+
+@app.route('/delete_dv/<da_id>', methods=['POST'])
+def delete_dv(da_id):  # da_id as the parameter
+    if 'user_id' in session:
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the domestic violence report using da_id
+            cursor.execute("DELETE FROM domestic_violence_reports WHERE da_id = %s", (da_id,))
+            connection.commit()
+            flash('Domestic violence report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
+
+
+
+@app.route('/delete_drug/<drug_id>', methods=['POST'])
+def delete_drug(drug_id):
+    if 'user_id' in session:
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the drug offense report
+            cursor.execute("DELETE FROM drug_offense_reports WHERE drug_id = %s", (drug_id,))
+            connection.commit()
+            flash('Drug offense report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
+
+@app.route('/delete_traffic/<traffic_id>', methods=['POST'])
+def delete_traffic(traffic_id):
+    if 'user_id' in session:
+        try:
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            # Delete the traffic accident report
+            cursor.execute("DELETE FROM traffic_accidents_reports WHERE traffic_id = %s", (traffic_id,))
+            connection.commit()
+            flash('Traffic accident report deleted successfully!', 'success')
+        except mysql.connector.Error as err:
+            flash(f'Error: {err}', 'danger')
+        finally:
+            cursor.close()
+            connection.close()
+
+    return redirect(url_for('view_reports'))
 
 
 
