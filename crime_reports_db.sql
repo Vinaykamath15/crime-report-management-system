@@ -1,9 +1,9 @@
-use crime_reports_db;
+create database crime_reports_db;
 
 
 use crime_reports_db;
 SET SQL_SAFE_UPDATES = 0;
-DELETE FROM users;
+ALTER TABLE murder_reports MODIFY case_status VARCHAR(50);
 
 
 CREATE TABLE users (

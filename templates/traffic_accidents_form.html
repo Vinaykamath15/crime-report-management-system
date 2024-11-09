@@ -4,77 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Traffic Accident Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('static/images/addrep.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px 40px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: left;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+            padding-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        label {
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .toggle-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .toggle {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #333;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .toggle:hover {
+            background-color: #555;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + .toggle {
+            background-color: #00aaff;
+            border-color: #00aaff;
+        }
+
+        button {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+    </style>
 </head>
 <body>
-    <h1>Traffic Accident Report</h1>
-    <form action="{{ url_for('submit_traffic_accident_report') }}" method="POST">
-        <label for="traffic_id">Traffic ID:</label>
-        <input type="text" id="traffic_id" name="traffic_id" required><br><br>
+    <div class="container">
+        <h1>Traffic Accident Report</h1>
+        <form action="{{ url_for('submit_traffic_accident_report') }}" method="POST">
+            <label for="traffic_id">Traffic ID:</label>
+            <input type="text" id="traffic_id" name="traffic_id" required>
 
-        <label for="case_name">Case Name:</label>
-        <input type="text" id="case_name" name="case_name" required><br><br>
+            <label for="case_name">Case Name:</label>
+            <input type="text" id="case_name" name="case_name" required>
 
-        <label for="time_of_incident">Time of Incident:</label>
-        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br><br>
+            <label for="time_of_incident">Time of Incident:</label>
+            <input type="datetime-local" id="time_of_incident" name="time_of_incident" required>
 
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" required><br><br>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
 
-        <label for="injuries">Were there injuries?</label>
-        <select id="injuries" name="injuries" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <label>Were there injuries?</label>
+            <div class="toggle-container">
+                <input type="radio" id="injuries_yes" name="injuries" value="Yes" required>
+                <label for="injuries_yes" class="toggle">Yes</label>
+                <input type="radio" id="injuries_no" name="injuries" value="No" required>
+                <label for="injuries_no" class="toggle">No</label>
+            </div>
 
-        <label for="property_damage">Was there damage to property?</label>
-        <select id="property_damage" name="property_damage" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <label>Was there damage to property?</label>
+            <div class="toggle-container">
+                <input type="radio" id="property_damage_yes" name="property_damage" value="Yes" required>
+                <label for="property_damage_yes" class="toggle">Yes</label>
+                <input type="radio" id="property_damage_no" name="property_damage" value="No" required>
+                <label for="property_damage_no" class="toggle">No</label>
+            </div>
 
-        <label for="alcohol_drugs_involved">Was alcohol/drugs involved?</label>
-        <select id="alcohol_drugs_involved" name="alcohol_drugs_involved" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <label>Was alcohol/drugs involved?</label>
+            <div class="toggle-container">
+                <input type="radio" id="alcohol_drugs_yes" name="alcohol_drugs_involved" value="Yes" required>
+                <label for="alcohol_drugs_yes" class="toggle">Yes</label>
+                <input type="radio" id="alcohol_drugs_no" name="alcohol_drugs_involved" value="No" required>
+                <label for="alcohol_drugs_no" class="toggle">No</label>
+            </div>
 
-        <label for="details_of_accident">Details of Accident:</label><br>
-        <textarea id="details_of_accident" name="details_of_accident" rows="4" required></textarea><br><br>
+            <label for="details_of_accident">Details of Accident:</label>
+            <textarea id="details_of_accident" name="details_of_accident" rows="4" required></textarea>
 
-        <label for="crime_severity">Crime Severity:</label>
-        <select id="crime_severity" name="crime_severity" required>
-            <option value="Minor">Minor</option>
-            <option value="Moderate">Moderate</option>
-            <option value="Serious">Serious</option>
-            <option value="Critical">Critical</option>
-        </select><br><br>
+            <label for="crime_severity">Crime Severity:</label>
+            <select id="crime_severity" name="crime_severity" required>
+                <option value="Minor">Minor</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Serious">Serious</option>
+                <option value="Critical">Critical</option>
+            </select>
 
-        <h3>Victim Information</h3>
-        <label for="victim_age">Age:</label>
-        <input type="number" id="victim_age" name="victim_age" required><br><br>
+            <h3>Victim Information</h3>
+            <label for="victim_age">Age:</label>
+            <input type="number" id="victim_age" name="victim_age" required>
 
-        <label for="victim_gender">Gender:</label>
-        <input type="text" id="victim_gender" name="victim_gender" required><br><br>
+            <label for="victim_gender">Gender:</label>
+            <input type="text" id="victim_gender" name="victim_gender" required>
 
-        <label for="victim_occupation">Occupation:</label>
-        <input type="text" id="victim_occupation" name="victim_occupation" required><br><br>
+            <label for="victim_occupation">Occupation:</label>
+            <input type="text" id="victim_occupation" name="victim_occupation" required>
 
-        <label for="witness">Was there any witness?</label>
-        <select id="witness" name="witness" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <label>Was there any witness?</label>
+            <div class="toggle-container">
+                <input type="radio" id="witness_yes" name="witness" value="Yes" required>
+                <label for="witness_yes" class="toggle">Yes</label>
+                <input type="radio" id="witness_no" name="witness" value="No" required>
+                <label for="witness_no" class="toggle">No</label>
+            </div>
 
-        <label for="same_day_report">Was the crime reported on the same day?</label>
-        <select id="same_day_report" name="same_day_report" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <label>Was the crime reported on the same day?</label>
+            <div class="toggle-container">
+                <input type="radio" id="same_day_report_yes" name="same_day_report" value="Yes" required>
+                <label for="same_day_report_yes" class="toggle">Yes</label>
+                <input type="radio" id="same_day_report_no" name="same_day_report" value="No" required>
+                <label for="same_day_report_no" class="toggle">No</label>
+            </div>
 
-        <label for="additional_comments">Additional Comments:</label><br>
-        <textarea id="additional_comments" name="additional_comments" rows="4"></textarea><br><br>
+            <label for="additional_comments">Additional Comments:</label>
+            <textarea id="additional_comments" name="additional_comments" rows="4"></textarea>
 
-        <button type="submit">Submit Report</button>
-    </form>
+            <button type="submit">Submit Report</button>
+        </form>
+    </div>
 </body>
 </html>

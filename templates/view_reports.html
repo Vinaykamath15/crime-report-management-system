@@ -6,12 +6,12 @@
     <title>View Reports</title>
     <style>
         table {
-            display: none; /* Initially hide all tables */
+            display: none; 
             width: 100%;
             border-collapse: collapse;
         }
         h2 {
-            cursor: pointer; /* Make headings clickable */
+            cursor: pointer; 
         }
         th, td {
             padding: 8px;
@@ -69,13 +69,13 @@
 <body>
     <h1>Reports</h1>
 
-    <!-- Search Bar -->
+    
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search by Case ID or Case Name" onkeyup="searchReports()">
         <button onclick="searchReports()">Search</button>
     </div>
 
-    <!-- Murder Reports -->
+    
     <h2 onclick="toggleTable('murderTable')">Murder Reports</h2>
     <table id="murderTable" border="1">
         <thead>
@@ -101,8 +101,7 @@
         </tbody>
     </table>
 
-    <!-- Other reports follow the same pattern as above -->
-    <!-- Assault Reports -->
+   
     <h2 onclick="toggleTable('assaultTable')">Assault Reports</h2>
     <table id="assaultTable" border="1">
         <thead>
@@ -193,8 +192,8 @@
             <td>{{ report[0] }}</td>
             <td>{{ report[1] }}</td>
             <td>
-                <a href="{{ url_for('sexual_assault_details', sa_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_sexual_assault', sa_id=report[0]) }}" method="POST" style="display:inline;">
+                <a href="{{ url_for('sa_details', sa_id=report[0]) }}">View Details</a>
+                <form action="{{ url_for('delete_sa', sa_id=report[0]) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
                 </form>
             </td>
@@ -202,6 +201,7 @@
         {% endfor %}
     </tbody>
 </table>
+
 
 <h2 onclick="toggleTable('dvTable')">Domestic Violence Reports</h2>
 <table id="dvTable" border="1">
@@ -218,8 +218,8 @@
             <td>{{ report[0] }}</td>
             <td>{{ report[1] }}</td>
             <td>
-                <a href="{{ url_for('domestic_violence_details', dv_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_domestic_violence', dv_id=report[0]) }}" method="POST" style="display:inline;">
+                <a href="{{ url_for('dv_details', da_id=report[0]) }}">View Details</a>
+                <form action="{{ url_for('delete_dv', da_id=report[0]) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
                 </form>
             </td>
@@ -243,8 +243,8 @@
             <td>{{ report[0] }}</td>
             <td>{{ report[1] }}</td>
             <td>
-                <a href="{{ url_for('drug_offense_details', drug_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_drug_offense', drug_id=report[0]) }}" method="POST" style="display:inline;">
+                <a href="{{ url_for('drug_details', drug_id=report[0]) }}">View Details</a>
+                <form action="{{ url_for('delete_drug', drug_id=report[0]) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
                 </form>
             </td>
@@ -268,8 +268,8 @@
             <td>{{ report[0] }}</td>
             <td>{{ report[1] }}</td>
             <td>
-                <a href="{{ url_for('traffic_accident_details', traffic_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_traffic_accident', traffic_id=report[0]) }}" method="POST" style="display:inline;">
+                <a href="{{ url_for('traffic_details', traffic_id=report[0]) }}">View Details</a>
+                <form action="{{ url_for('delete_traffic', traffic_id=report[0]) }}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
                 </form>
             </td>

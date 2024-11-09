@@ -4,83 +4,229 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assault Report Form</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('static/images/addrep.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px 40px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-align: left;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+            padding-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        label {
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            height: 35px; /* Reduced height of input fields */
+        }
+
+        select {
+            height: 35px; /* Ensure select box height is consistent */
+        }
+
+        .half-width {
+            width: 48%;
+        }
+
+        textarea {
+            height: 80px; /* Reduced height of textarea */
+        }
+
+        input[type="submit"] {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            height: 40px; /* Reduced button height */
+        }
+
+        input[type="submit"]:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .radio-group, .radio-option {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .radio-group label, .radio-option label {
+            margin: 0 10px 0 5px; /* Align the labels better */
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 5px; /* Adjust spacing between radio buttons and labels */
+        }
+
+        .radio-group {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Assault Report Form</h1>
-    <form action="{{ url_for('submit_assault_report') }}" method="POST">
-        <label for="assault_id">Assault ID:</label><br>
-        <input type="text" id="assault_id" name="assault_id" required><br><br>
+    <div class="container">
+        <h1>Assault Report Form</h1>
+        <form action="{{ url_for('submit_assault_report') }}" method="POST">
+            <label for="assault_id">Assault ID:</label>
+            <input type="text" id="assault_id" name="assault_id" required>
 
-        <label for="case_name">Case Name:</label><br>
-        <input type="text" id="case_name" name="case_name" required><br><br>
+            <label for="case_name">Case Name:</label>
+            <input type="text" id="case_name" name="case_name" required>
 
-        <label for="time_of_incident">Time of Incident:</label><br>
-        <input type="datetime-local" id="time_of_incident" name="time_of_incident" required><br><br>
+            <label for="time_of_incident">Time of Incident:</label>
+            <input type="datetime-local" id="time_of_incident" name="time_of_incident" required>
 
-        <label for="location">Location:</label><br>
-        <input type="text" id="location" name="location" required><br><br>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
 
-        <label for="crime_severity">Crime Severity:</label><br>
-        <select id="crime_severity" name="crime_severity" required>
-            <option value="Minor">Minor</option>
-            <option value="Moderate">Moderate</option>
-            <option value="Serious">Serious</option>
-            <option value="Critical">Critical</option>
-        </select><br><br>
+            <label for="crime_severity">Crime Severity:</label>
+            <select id="crime_severity" name="crime_severity" required>
+                <option value="Minor">Minor</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Serious">Serious</option>
+                <option value="Critical">Critical</option>
+            </select>
 
-        <label for="victim_age">Victim Age:</label><br>
-        <input type="number" id="victim_age" name="victim_age" required><br><br>
+            <div class="half-width">
+                <label for="victim_age">Victim Age:</label>
+                <input type="number" id="victim_age" name="victim_age" required>
+            </div>
 
-        <label for="victim_gender">Victim Gender:</label><br>
-        <input type="text" id="victim_gender" name="victim_gender" required><br><br>
+            <div class="half-width">
+                <label for="victim_gender">Victim Gender:</label>
+                <input type="text" id="victim_gender" name="victim_gender" required>
+            </div>
 
-        <label for="victim_occupation">Victim Occupation:</label><br>
-        <input type="text" id="victim_occupation" name="victim_occupation" required><br><br>
+            <label for="victim_occupation">Victim Occupation:</label>
+            <input type="text" id="victim_occupation" name="victim_occupation" required>
 
-        <label for="witness_present">Was there any witness?</label><br>
-        <select id="witness_present" name="witness_present" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <div class="form-section">
+                <label>Was there any witness?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="witness_yes" name="witness_present" value="Yes" required>
+                        <label for="witness_yes">Yes</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="witness_no" name="witness_present" value="No" required>
+                        <label for="witness_no">No</label>
+                    </div>
+                </div>
+            </div>
 
-        <label for="reported_immediately">Did the victim report to the police immediately?</label><br>
-        <select id="reported_immediately" name="reported_immediately" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <div class="form-section">
+                <label>Did the victim report to the police immediately?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="report_yes" name="reported_immediately" value="Yes" required>
+                        <label for="report_yes">Yes</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="report_no" name="reported_immediately" value="No" required>
+                        <label for="report_no">No</label>
+                    </div>
+                </div>
+            </div>
 
-        <label for="reported_same_day">Was the crime reported on the same day?</label><br>
-        <select id="reported_same_day" name="reported_same_day" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <div class="form-section">
+                <label>Was the crime reported on the same day?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="same_day_yes" name="reported_same_day" value="Yes" required>
+                        <label for="same_day_yes">Yes</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="same_day_no" name="reported_same_day" value="No" required>
+                        <label for="same_day_no">No</label>
+                    </div>
+                </div>
+            </div>
 
-        <label for="type_of_assault">Type of Assault:</label><br>
-        <select id="type_of_assault" name="type_of_assault" required>
-            <option value="Physical">Physical</option>
-            <option value="Verbal">Verbal</option>
-            <option value="Sexual">Sexual</option>
-        </select><br><br>
+            <label for="type_of_assault">Type of Assault:</label>
+            <select id="type_of_assault" name="type_of_assault" required>
+                <option value="Physical">Physical</option>
+                <option value="Verbal">Verbal</option>
+                <option value="Sexual">Sexual</option>
+            </select>
 
-        <label for="injuries_reported">Injuries Reported:</label><br>
-        <select id="injuries_reported" name="injuries_reported" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <label for="injuries_reported">Injuries Reported:</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="injuries_yes" name="injuries_reported" value="Yes" required>
+                    <label for="injuries_yes">Yes</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="injuries_no" name="injuries_reported" value="No" required>
+                    <label for="injuries_no">No</label>
+                </div>
+            </div>
 
-        <label for="weapon_involved">Was a weapon involved?</label><br>
-        <select id="weapon_involved" name="weapon_involved" required>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
-        </select><br><br>
+            <label for="weapon_involved">Was a weapon involved?</label>
+            <div class="radio-group">
+                <div class="radio-option">
+                    <input type="radio" id="weapon_yes" name="weapon_involved" value="Yes" required>
+                    <label for="weapon_yes">Yes</label>
+                </div>
+                <div class="radio-option">
+                    <input type="radio" id="weapon_no" name="weapon_involved" value="No" required>
+                    <label for="weapon_no">No</label>
+                </div>
+            </div>
 
-        <label for="details_of_incident">Details of Incident:</label><br>
-        <textarea id="details_of_incident" name="details_of_incident" required></textarea><br><br>
+            <label for="details_of_incident">Details of Incident:</label>
+            <textarea id="details_of_incident" name="details_of_incident" required></textarea>
 
-        <label for="additional_comments">Additional Comments:</label><br>
-        <textarea id="additional_comments" name="additional_comments"></textarea><br><br>
+            <label for="additional_comments">Additional Comments:</label>
+            <textarea id="additional_comments" name="additional_comments"></textarea>
 
-        <input type="submit" value="Submit Report">
-    </form>
+            <input type="submit" value="Submit Report">
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Crime Reports Management System. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>

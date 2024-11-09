@@ -5,90 +5,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Murder Report Form</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-image: url('static/images/addrep.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 50px auto;
-            background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent background */
-            padding: 20px 40px;
-            border-radius: 10px;
-            color: white;
-        }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            text-align: left;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.7); /* White accent */
-            padding-bottom: 10px;
-        }
-
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        label {
-            width: 100%;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        .half-width {
-            width: 48%;
-        }
-
-        textarea {
-            height: 100px;
-        }
-
-        input[type="submit"] {
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background-color: rgba(0, 0, 0, 0.9);
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: white;
-            font-size: 0.9em;
-        }
-    </style>
 </head>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url('static/images/addrep.jpg');
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
 
+    .container {
+        max-width: 900px;
+        margin: 50px auto;
+        background-color: rgba(0, 0, 0, 0.6); /* Dark semi-transparent background */
+        padding: 20px 40px;
+        border-radius: 10px;
+        color: white;
+    }
+
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        text-align: left;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.7); /* White accent */
+        padding-bottom: 10px;
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    label {
+        width: 100%;
+        margin-bottom: 10px;
+        font-size: 1.1em;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+
+    .half-width {
+        width: 48%;
+    }
+
+    textarea {
+        height: 100px;
+    }
+
+    input[type="submit"] {
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    input[type="submit"]:hover {
+        background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        color: white;
+        font-size: 0.9em;
+    }
+</style>
 <body>
     <div class="container">
         <h1>Murder Report Form</h1>
         <form action="/submit_murder_report" method="POST">
-            <label for="murder_id">Murder ID:</label>
-            <input type="text" id="murder_id" name="murder_id" required>
 
             <label for="case_name">Case Name:</label>
             <input type="text" id="case_name" name="case_name" required>
@@ -159,11 +156,13 @@
             <label for="details_of_incident">Details of Incident:</label>
             <textarea id="details_of_incident" name="details_of_incident" required></textarea>
 
-            <label for="case_status">Status of the Case:</label>
-            <select id="case_status" name="case_status" required>
-                <option value="Apprehended">Apprehended</option>
-                <option value="Not Apprehended">Not Apprehended</option>
-            </select>
+            <label for="case_status">Criminal Apprehended:</label>
+               <select id="case_status" name="case_status" required>
+               <option value="Yes">Yes</option>
+               <option value="No">No</option>
+                </select>
+
+
 
             <label for="additional_comments">Additional Comments:</label>
             <textarea id="additional_comments" name="additional_comments"></textarea>
