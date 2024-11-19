@@ -5,40 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Reports</title>
     <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-image: url('static/images/viewreports.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .search-container {
+            width: 100%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 250px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .search-container input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .crime-names {
+            text-align: left;
+            width: 200px;
+            margin: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+        }
+
+        .crime-names h2 {
+            font-size: 1.5em;
+            color: #ffffff;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .crime-names ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .crime-names ul li {
+            font-size: 1.2em;
+            color: #ffffff;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .crime-names ul li:hover {
+            color: #00aaff;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            width: 100%;
+            margin-top: 20px;
+        }
+
         table {
-            display: none; 
             width: 100%;
             border-collapse: collapse;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.6);
         }
-        h2 {
-            cursor: pointer; 
-        }
+
         th, td {
-            padding: 8px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        .search-container {
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            width: 300px;
             padding: 10px;
-            margin-right: 10px;
             border: 1px solid #ddd;
+            color: white;
         }
-        button {
-            padding: 10px;
-            cursor: pointer;
+
+        th {
+            background-color: rgba(0, 0, 0, 0.7);
+            font-weight: bold;
         }
     </style>
+
     <script>
         function toggleTable(id) {
             var table = document.getElementById(id);
             if (table.style.display === "none" || table.style.display === "") {
-                table.style.display = "table"; // Show the table
+                table.style.display = "table"; 
             } else {
-                table.style.display = "none"; // Hide the table
+                table.style.display = "none"; 
             }
         }
 
@@ -67,218 +154,217 @@
     </script>
 </head>
 <body>
-    <h1>Reports</h1>
+    <header>
+        <h1>Reports</h1>
+    </header>
 
-    
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search by Case ID or Case Name" onkeyup="searchReports()">
         <button onclick="searchReports()">Search</button>
     </div>
 
-    
-    <h2 onclick="toggleTable('murderTable')">Murder Reports</h2>
-    <table id="murderTable" border="1">
-        <thead>
-            <tr>
-                <th>Murder ID</th>
-                <th>Case Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for report in murder_reports %}
-            <tr>
-                <td>{{ report[0] }}</td>
-                <td>{{ report[1] }}</td>
-                <td>
-                    <a href="{{ url_for('murder_details', murder_id=report[0]) }}">View Details</a>
-                    <form action="{{ url_for('delete_murder', murder_id=report[0]) }}" method="POST" style="display:inline;">
-                        <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-container">
+        <h2 onclick="toggleTable('murderTable')">Murder Reports</h2>
+        <table id="murderTable">
+            <thead>
+                <tr>
+                    <th>Murder ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in murder_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('murder_details', murder_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_murder', murder_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-   
-    <h2 onclick="toggleTable('assaultTable')">Assault Reports</h2>
-    <table id="assaultTable" border="1">
-        <thead>
-            <tr>
-                <th>Assault ID</th>
-                <th>Case Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for report in assault_reports %}
-            <tr>
-                <td>{{ report[0] }}</td>
-                <td>{{ report[1] }}</td>
-                <td>
-                    <a href="{{ url_for('assault_details', assault_id=report[0]) }}">View Details</a>
-                    <form action="{{ url_for('delete_assault', assault_id=report[0]) }}" method="POST" style="display:inline;">
-                        <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2 onclick="toggleTable('assaultTable')">Assault Reports</h2>
+        <table id="assaultTable">
+            <thead>
+                <tr>
+                    <th>Assault ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in assault_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('assault_details', assault_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_assault', assault_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2 onclick="toggleTable('theftTable')">Theft Reports</h2>
-<table id="theftTable" border="1">
-    <thead>
-        <tr>
-            <th>Theft ID</th>
-            <th>Case Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in theft_reports %}
-        <tr>
-            <td>{{ report[0] }}</td>
-            <td>{{ report[1] }}</td>
-            <td>
-                <a href="{{ url_for('theft_details', theft_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_theft', theft_id=report[0]) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        <h2 onclick="toggleTable('theftTable')">Theft Reports</h2>
+        <table id="theftTable">
+            <thead>
+                <tr>
+                    <th>Theft ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in theft_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('theft_details', theft_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_theft', theft_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2 onclick="toggleTable('fraudTable')">Fraud Reports</h2> 
+        <table id="fraudTable" border="1">
+            <thead>
+                <tr>
+                    <th>Fraud ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in fraud_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('fraud_details', fraud_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_fraud', fraud_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h2 onclick="toggleTable('saTable')">Sexual Assault Reports</h2>
+        <table id="saTable" border="1">
+            <thead>
+                <tr>
+                    <th>Sexual Assault ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in sa_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('sa_details', sa_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_sa', sa_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h2 onclick="toggleTable('dvTable')">Domestic Violence Reports</h2>
+        <table id="dvTable" border="1">
+            <thead>
+                <tr>
+                    <th>Domestic Violence ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in dv_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('dv_details', da_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_dv', da_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h2 onclick="toggleTable('drugTable')">Drug Offense Reports</h2>
+        <table id="drugTable" border="1">
+            <thead>
+                <tr>
+                    <th>Drug Offense ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in drug_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('drug_details', drug_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_drug', drug_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <h2 onclick="toggleTable('trafficTable')">Traffic Accident Reports</h2>
+        <table id="trafficTable" border="1">
+            <thead>
+                <tr>
+                    <th>Traffic Accident ID</th>
+                    <th>Case Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in traffic_reports %}
+                <tr>
+                    <td>{{ report[0] }}</td>
+                    <td>{{ report[1] }}</td>
+                    <td>
+                        <a href="{{ url_for('traffic_details', traffic_id=report[0]) }}">View Details</a>
+                        <form action="{{ url_for('delete_traffic', traffic_id=report[0]) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        
 
-<h2 onclick="toggleTable('fraudTable')">Fraud Reports</h2>
-<table id="fraudTable" border="1">
-    <thead>
-        <tr>
-            <th>Fraud ID</th>
-            <th>Case Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in fraud_reports %}
-        <tr>
-            <td>{{ report[0] }}</td>
-            <td>{{ report[1] }}</td>
-            <td>
-                <a href="{{ url_for('fraud_details', fraud_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_fraud', fraud_id=report[0]) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h2 onclick="toggleTable('saTable')">Sexual Assault Reports</h2>
-<table id="saTable" border="1">
-    <thead>
-        <tr>
-            <th>Sexual Assault ID</th>
-            <th>Case Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in sa_reports %}
-        <tr>
-            <td>{{ report[0] }}</td>
-            <td>{{ report[1] }}</td>
-            <td>
-                <a href="{{ url_for('sa_details', sa_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_sa', sa_id=report[0]) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-
-<h2 onclick="toggleTable('dvTable')">Domestic Violence Reports</h2>
-<table id="dvTable" border="1">
-    <thead>
-        <tr>
-            <th>Domestic Violence ID</th>
-            <th>Case Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in dv_reports %}
-        <tr>
-            <td>{{ report[0] }}</td>
-            <td>{{ report[1] }}</td>
-            <td>
-                <a href="{{ url_for('dv_details', da_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_dv', da_id=report[0]) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h2 onclick="toggleTable('drugTable')">Drug Offense Reports</h2>
-<table id="drugTable" border="1">
-    <thead>
-        <tr>
-            <th>Drug Offense ID</th>
-            <th>Case Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in drug_reports %}
-        <tr>
-            <td>{{ report[0] }}</td>
-            <td>{{ report[1] }}</td>
-            <td>
-                <a href="{{ url_for('drug_details', drug_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_drug', drug_id=report[0]) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<h2 onclick="toggleTable('trafficTable')">Traffic Accident Reports</h2>
-<table id="trafficTable" border="1">
-    <thead>
-        <tr>
-            <th>Traffic Accident ID</th>
-            <th>Case Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for report in traffic_reports %}
-        <tr>
-            <td>{{ report[0] }}</td>
-            <td>{{ report[1] }}</td>
-            <td>
-                <a href="{{ url_for('traffic_details', traffic_id=report[0]) }}">View Details</a>
-                <form action="{{ url_for('delete_traffic', traffic_id=report[0]) }}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Are you sure you want to delete this report?');">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    </div>
 </body>
 </html>
-
-
-    

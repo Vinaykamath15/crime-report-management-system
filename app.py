@@ -1,5 +1,6 @@
 from flask import Flask, request, session, redirect, url_for, render_template, flash
 import mysql.connector
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -22,7 +23,7 @@ db = mysql.connector.connect(
     database="crime_reports_db"
 )
 
-# Routes
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -192,7 +193,7 @@ def generate_assault_id():
     connection.close()
 
     
-    return f"ad--{next_num:02}"
+    return f"as--{next_num:02}"
 
 @app.route('/submit_assault_report', methods=['POST'])
 def submit_assault_report():
@@ -1398,7 +1399,6 @@ def delete_traffic(traffic_id):
             connection.close()
 
     return redirect(url_for('view_reports'))
-
 
 
 @app.route('/logout')
