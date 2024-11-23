@@ -1,5 +1,6 @@
 from flask import Flask, request, session, redirect, url_for, render_template, flash
 import mysql.connector
+import sqlite3
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -495,7 +496,7 @@ def generate_drug_id():
     cursor.close()
     connection.close()
 
-    return f"drug--{next_num:02}"
+    return f"dg--{next_num:02}"
 
 @app.route('/submit_drug_offense_report', methods=['GET', 'POST'])
 def submit_drug_offense_report():
@@ -550,7 +551,7 @@ def generate_traffic_id():
     cursor.close()
     connection.close()
 
-    return f"ta--{next_num:02}"
+    return f"tr--{next_num:02}"
 
 @app.route('/submit_traffic_accident_report', methods=['GET', 'POST'])
 def submit_traffic_accident_report():
@@ -589,7 +590,6 @@ def submit_traffic_accident_report():
         return redirect(url_for('view_reports'))
 
     return render_template('traffic_accident_form.html')
-
 
 
 
@@ -693,8 +693,6 @@ def view_reports():
         drug_reports=drug_reports,
         traffic_reports=traffic_reports
     )
-
-
 
 
 
@@ -1399,6 +1397,83 @@ def delete_traffic(traffic_id):
             connection.close()
 
     return redirect(url_for('view_reports'))
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    results = []
+    if request.method == 'POST':
+        # Existing filters
+        crime_severity = request.form.get('crime_severity')
+        location = request.form.get('location')
+        witness_present = request.form.get('witness_present')
+
+        # New filters
+        start_age = request.form.get('start_age')
+        end_age = request.form.get('end_age')
+        same_day_report = request.form.get('same_day_report')
+        weapon_used = request.form.get('weapon_used')
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
+
+        filters = []
+
+        # Base query with UNION ALL
+        query = """
+        SELECT 'murder' AS table_name, case_name, time_of_incident, location, crime_severity, witness_present, victim_age, reported_same_day, weapon_used
+        FROM murder_reports
+        UNION ALL
+        SELECT 'assault', case_name, time_of_incident, location, crime_severity, witness_present, victim_age, reported_same_day, NULL AS weapon_used
+        FROM assault_reports
+        UNION ALL
+        SELECT 'theft', case_name, time_of_incident, location, crime_severity, witness_present, victim_age, reported_same_day, weapon_involved AS weapon_used
+        FROM theft_reports
+        UNION ALL
+        SELECT 'fraud', case_name, time_of_incident, location, crime_severity, 'N/A' AS witness_present, victim_age, reported_same_day, NULL AS weapon_used
+        FROM fraud_reports
+        UNION ALL
+        SELECT 'sexual assault', case_name, time_of_incident, location, crime_severity, was_witness AS witness_present, victim_age, reported_same_day, NULL AS weapon_used
+        FROM sexual_assault_reports
+        UNION ALL
+        SELECT 'domestic violence', case_name, time_of_incident, location, crime_severity, witness, victim_age, reported_same_day, NULL AS weapon_used
+        FROM domestic_violence_reports
+        UNION ALL
+        SELECT 'drug offense', case_name, incident_time AS time_of_incident, location, severity AS crime_severity, witness, criminal_age AS victim_age, reported_same_day, NULL AS weapon_used
+        FROM drug_offense_reports
+        UNION ALL
+        SELECT 'traffic accident', case_name, time_of_incident, location, crime_severity, witness, victim_age, same_day_report AS reported_same_day, NULL AS weapon_used
+        FROM traffic_accident_reports
+        """
+
+        # Apply filters
+        if crime_severity:
+            filters.append(f"crime_severity = '{crime_severity}'")
+        if location:
+            filters.append(f"location LIKE '%{location}%'")
+        if witness_present:
+            filters.append(f"witness_present = '{witness_present}'")
+        if start_age and end_age:
+            filters.append(f"victim_age BETWEEN {start_age} AND {end_age}")
+        if same_day_report:
+            filters.append(f"reported_same_day = '{same_day_report}'")
+        if weapon_used:
+            filters.append(f"weapon_used = '{weapon_used}'")
+        if start_date and end_date:
+            filters.append(f"time_of_incident BETWEEN '{start_date}' AND '{end_date}'")
+
+        # Combine filters into the query
+        if filters:
+            query = f"SELECT * FROM ({query}) AS combined_reports WHERE " + " AND ".join(filters)
+
+        # Fetch results
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute(query)
+        results = cursor.fetchall()
+        connection.close()
+
+    return render_template('search.html', results=results)
+
 
 
 @app.route('/logout')

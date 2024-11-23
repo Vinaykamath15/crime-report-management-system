@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Reports</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-image: url('static/images/viewreports.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        label {
+            font-size: 1.1em;
+            color: #ffffff;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            max-width: 200px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1em;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="number"]::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #00aaff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0088cc;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            color: white;
+        }
+
+        th {
+            background-color: rgba(0, 0, 0, 0.7);
+            font-weight: bold;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #ffffff;
+        }
+        /* Style for the dropdown menu */
+select {
+    width: 200px; /* Adjust width as needed */
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.6); /* Matches the overlay style */
+    color: white; /* Text color */
+    font-size: 1em;
+    appearance: none; /* Removes the default browser styling */
+    outline: none;
+    cursor: pointer;
+}
+
+/* Add a caret to mimic dropdown arrow (optional) */
+select:focus {
+    box-shadow: 0 0 5px #00aaff; /* Highlight on focus */
+}
+
+/* Style for dropdown options */
+option {
+    background-color: rgba(0, 0, 0, 0.8); /* Dropdown background */
+    color: white; /* Text color */
+    font-size: 1em;
+    padding: 5px;
+}
+
+/* Change hover/selected appearance */
+select option:hover,
+select option:focus {
+    background-color: #00aaff; /* Highlight on hover */
+    color: white; /* Text color on hover */
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Search Reports</h1>
+    </header>
+
+    <div class="overlay">
+        <form method="POST">
+            <!-- Filters -->
+            <label>Crime Severity:</label>
+            <select name="crime_severity">
+                <option value="">-- Select Severity --</option>
+                <option value="Minor">Minor</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Serious">Serious</option>
+                <option value="Critical">Critical</option>
+            </select>
+
+            <label>Location:</label>
+            <input type="text" name="location" placeholder="Enter location">
+
+            <label>Witness Present:</label>
+            <select name="witness_present">
+                <option value="">-- Select Option --</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Age Group:</label>
+            <input type="number" name="start_age" placeholder="Start Age">
+            <input type="number" name="end_age" placeholder="End Age">
+
+            <label>Reported Same Day:</label>
+            <select name="same_day_report">
+                <option value="">-- Select Option --</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Weapon Used:</label>
+            <select name="weapon_used">
+                <option value="">-- Select Weapon --</option>
+                <option value="Firearm">Firearm</option>
+                <option value="Knife">Knife</option>
+                <option value="None">None</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label>Crime Dates:</label>
+            <input type="date" name="start_date" placeholder="Start Date">
+            <input type="date" name="end_date" placeholder="End Date">
+
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Display Results -->
+        {% if results %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Report Type</th>
+                    <th>Case Name</th>
+                    <th>Time of Incident</th>
+                    <th>Location</th>
+                    <th>Severity</th>
+                    <th>Witness</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in results %}
+                <tr>
+                    <td>{{ report['table_name'] }}</td>
+                    <td>{{ report['case_name'] }}</td>
+                    <td>{{ report['time_of_incident'] }}</td>
+                    <td>{{ report['location'] }}</td>
+                    <td>{{ report['crime_severity'] }}</td>
+                    <td>{{ report['witness_present'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No results found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
