@@ -1,6 +1,6 @@
 from flask import Flask, request, session, redirect, url_for, render_template, flash
 import mysql.connector
-import sqlite3
+
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -1473,7 +1473,6 @@ def search():
         connection.close()
 
     return render_template('search.html', results=results)
-
 
 
 @app.route('/logout')
