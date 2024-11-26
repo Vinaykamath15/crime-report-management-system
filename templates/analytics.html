@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Reports Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #007bff;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        #chart-container {
+            margin: 20px auto;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 300px;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Crime Reports Analytics</h1>
+
+    <form id="analytics-form">
+        <label for="table">Select Table:</label>
+        <select id="table" required>
+            <option value="">--Select Table--</option>
+            <option value="murder_reports">Murder Reports</option>
+            <option value="assault_reports">Assault Reports</option>
+            <option value="theft_reports">Theft Reports</option>
+            <option value="fraud_reports">Fraud Reports</option>
+        </select>
+
+        <label for="metric">Select Metric:</label>
+        <select id="metric" required>
+            <option value="">--Select Metric--</option>
+            <option value="crime_severity_distribution">Crime Severity Distribution</option>
+            <option value="total_cases">Total Cases</option>
+            <option value="average_victim_age">Average Victim Age</option>
+        </select>
+
+        <label for="chart-type">Select Chart Type:</label>
+        <select id="chart-type" required>
+            <option value="bar">Bar Chart</option>
+            <option value="pie">Pie Chart</option>
+        </select>
+
+        <button type="submit">Get Analytics</button>
+    </form>
+
+    <div id="result"></div>
+    <div id="chart-container">
+        <canvas id="analytics-chart"></canvas>
+    </div>
+    <div class="error" id="error"></div>
+
+    <script>
+        const form = document.getElementById('analytics-form');
+        const resultDiv = document.getElementById('result');
+        const errorDiv = document.getElementById('error');
+        const chartContainer = document.getElementById('chart-container');
+        const chartCanvas = document.getElementById('analytics-chart');
+        let chartInstance = null;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resultDiv.innerHTML = '';
+            errorDiv.innerHTML = '';
+            chartContainer.style.display = 'none';
+
+            const table = document.getElementById('table').value;
+            const metric = document.getElementById('metric').value;
+            const chartType = document.getElementById('chart-type').value;
+
+            if (!table || !metric || !chartType) {
+                errorDiv.textContent = "Please select table, metric, and chart type.";
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/analytics?table=${table}&metric=${metric}`);
+                const data = await response.json();
+
+                if (!response.ok || !Array.isArray(data) || !data.length) {
+                    errorDiv.textContent = data.error || "No data available.";
+                    return;
+                }
+
+                if (metric === "total_cases" || metric === "average_victim_age") {
+                    resultDiv.innerHTML = `<strong>${Object.keys(data[0])[0]}:</strong> ${Object.values(data[0])[0]}`;
+                }
+
+                if (metric === "crime_severity_distribution") {
+                    const labels = data.map(item => item.crime_severity);
+                    const values = data.map(item => item.count);
+
+                    if (!labels.length || !values.length) {
+                        errorDiv.textContent = "No chart data available.";
+                        return;
+                    }
+
+                    renderChart(labels, values, 'Crime Severity Distribution', chartType);
+                }
+
+                chartContainer.style.display = 'block';
+            } catch (error) {
+                errorDiv.textContent = "Failed to fetch analytics. Please try again.";
+                console.error(error);
+            }
+        });
+
+        function renderChart(labels, data, title, chartType) {
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(chartCanvas, {
+                type: chartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: title,
+                        data: data,
+                        backgroundColor: chartType === 'pie'
+                            ? ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                            : 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        },
+                        title: {
+                            display: true,
+                            text: title
+                        }
+                    },
+                    scales: chartType === 'bar' ? {
+                        y: {
+                            beginAtZero: true
+                        }
+                    } : {}
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, url_for, render_template, flash
+from flask import Flask, request, session, redirect, url_for, render_template, flash, jsonify
 import mysql.connector
 
 
@@ -1474,6 +1474,50 @@ def search():
 
     return render_template('search.html', results=results)
 
+@app.route("/analytics")
+def analytics():
+    return render_template('analytics.html')
+
+# Endpoint to fetch analytics
+@app.route('/api/analytics', methods=['GET'])
+def showanalytics():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Get table name and metric type from query parameters
+        table = request.args.get('table')
+        metric = request.args.get('metric')
+
+        if not table or not metric:
+            return jsonify({"error": "Please provide 'table' and 'metric' query parameters."}), 400
+
+        # Example: Fetching count of reports per crime severity
+        if metric == "crime_severity_distribution":
+            query = f"SELECT crime_severity, COUNT(*) as count FROM {table} GROUP BY crime_severity"
+
+        # Example: Fetching total cases for a table
+        elif metric == "total_cases":
+            query = f"SELECT COUNT(*) as total_cases FROM {table}"
+
+        # Example: Fetching average victim age
+        elif metric == "average_victim_age":
+            query = f"SELECT AVG(victim_age) as average_age FROM {table}"
+
+        else:
+            return jsonify({"error": "Unsupported metric."}), 400
+
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        return jsonify(results)
+
+    except mysql.connector.Error as err:
+        return jsonify({"error": str(err)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.route('/logout')
 def logout():
